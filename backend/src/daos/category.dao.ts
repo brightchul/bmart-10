@@ -4,7 +4,7 @@ import poolOption from "./pool-option";
 import { Query } from "../util/query";
 
 const SEARCH_SUB_CATEGORY_INFO = `SELECT no, name FROM sub_category WHERE name = ? `;
-const SEARCH_SUB_CATEGORY_NAME_LIST = `SELECT name, sub_category_array as data FROM main_category WHERE title = ? `;
+const SEARCH_SUB_CATEGORY_NAME_LIST = `SELECT name, sub_category_array as data FROM main_category WHERE name = ? `;
 const SEARCH_SUB_CATEGORY_NAME = `SELECT name FROM sub_category where no=?`;
 
 const SEARCH_MAIN_CATEGORY_GOODS = `
@@ -63,10 +63,10 @@ class CategoryDAO extends DAO {
     return result;
   }
   async getSubCategoryNameList(
-    mainTitle: string
+    mainName: string
   ): Promise<SubCategoryNameList | undefined> {
     const result = await this.getOneInfo(SEARCH_SUB_CATEGORY_NAME_LIST, [
-      mainTitle,
+      mainName,
     ]);
     return result;
   }
