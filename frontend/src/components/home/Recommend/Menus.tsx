@@ -5,8 +5,9 @@ import styled from "styled-components";
 
 import Menu from "./Menu";
 
+import { RECOMMEND_SECTION } from "../../../constants/layout";
+
 const THRESHOLD = 2740;
-const HEIGHT = 400;
 const DEBOUNCE_TIME = 20;
 
 const Wrapper = styled.div<{ innerHeight: number }>`
@@ -59,7 +60,7 @@ export default function Menus(props: Props): JSX.Element {
 
       if (flicking) {
         flicking.moveTo(
-          Math.floor((window.pageYOffset - THRESHOLD) / HEIGHT),
+          Math.floor((window.pageYOffset - THRESHOLD) / RECOMMEND_SECTION.SIZE),
           300
         );
       }
@@ -75,7 +76,7 @@ export default function Menus(props: Props): JSX.Element {
   return (
     <Wrapper
       innerHeight={props.innerHeight || 50}
-      ref={(el) => {
+      ref={(el): void => {
         wrapper = el;
       }}
     >
