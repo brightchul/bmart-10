@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import Flicking from "@egjs/react-flicking";
 import { FlickingEvent } from "@egjs/flicking";
 import styled from "styled-components";
 
 import Menu from "./Menu";
 
-const threshold = 2740;
+const THRESHOLD = 2740;
 const HEIGHT = 400;
+const DEBOUNCE_TIME = 20;
 
 const Wrapper = styled.div<{ innerHeight: number }>`
   width: 100%;
@@ -24,18 +25,14 @@ const Wrapper = styled.div<{ innerHeight: number }>`
 type Props = {
   innerHeight?: number;
   menus: Array<string>;
-  store: {
-    flicking: Flicking | undefined;
-  };
 };
 
 export default function Menus(props: Props): JSX.Element {
-  const [sticky, setSticky] = useState(false);
-
+  let wrapper: HTMLDivElement | null = null;
+  let flicking: undefined | Flicking = undefined;
   let debounceFlag = false;
-  const debounceTime = 20;
 
-  const observable = {
+  const highlightObserver = {
     map: new Map<string, React.Dispatch<React.SetStateAction<boolean>>>(),
     trigger: function (key: string): void {
       const beforeHandler = this.map.get(this.lastTarget);
@@ -54,41 +51,43 @@ export default function Menus(props: Props): JSX.Element {
   };
 
   window.onscroll = function (): void {
-    if (window.pageYOffset > threshold) {
-      setSticky(true);
+    if (window.pageYOffset > THRESHOLD) {
+      wrapper?.classList.add("sticky");
 
       if (debounceFlag) return;
       debounceFlag = true;
 
-      if (props.store.flicking) {
-        props.store.flicking.moveTo(
-          Math.floor((window.pageYOffset - threshold) / HEIGHT),
+      if (flicking) {
+        flicking.moveTo(
+          Math.floor((window.pageYOffset - THRESHOLD) / HEIGHT),
           300
         );
       }
 
       setTimeout(() => {
         debounceFlag = false;
-      }, debounceTime);
+      }, DEBOUNCE_TIME);
     } else {
-      setSticky(false);
+      wrapper?.classList.remove("sticky");
     }
   };
 
   return (
     <Wrapper
       innerHeight={props.innerHeight || 50}
-      className={sticky ? "sticky" : undefined}
+      ref={(el) => {
+        wrapper = el;
+      }}
     >
       <Flicking
         duration={500}
         gap={10}
         ref={(e: Flicking): void => {
-          props.store.flicking = e;
-          observable.trigger(props.menus[0]);
+          flicking = e;
+          highlightObserver.trigger(props.menus[0]);
         }}
         onMoveEnd={(e: FlickingEvent): void =>
-          observable.trigger(props.menus[e.index])
+          highlightObserver.trigger(props.menus[e.index])
         }
         overflow={false}
         hanger={"0"}
@@ -97,7 +96,11 @@ export default function Menus(props: Props): JSX.Element {
         autoResize={true}
       >
         {props.menus.reverse().map((menu, index) => (
-          <Menu key={`menu.${index}`} menu={menu} observable={observable} />
+          <Menu
+            key={`menu.${index}`}
+            menu={menu}
+            observable={highlightObserver}
+          />
         ))}
       </Flicking>
     </Wrapper>
