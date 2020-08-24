@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import Flicking from "@egjs/react-flicking";
 import { FlickingEvent } from "@egjs/flicking";
 import styled from "styled-components";
 
 import Menu from "./Menu";
 
+const threshold = 2740;
+const HEIGHT = 400;
+
 const Wrapper = styled.div<{ innerHeight: number }>`
   width: 100%;
   height: ${(props): number => props.innerHeight}px;
+
+  background-color: #eee;
+
+  &.sticky {
+    z-index: 3000;
+    position: fixed;
+    top: 80px;
+  }
 `;
 
 type Props = {
@@ -19,6 +30,11 @@ type Props = {
 };
 
 export default function Menus(props: Props): JSX.Element {
+  const [sticky, setSticky] = useState(false);
+
+  let debounceFlag = false;
+  const debounceTime = 20;
+
   const observable = {
     map: new Map<string, React.Dispatch<React.SetStateAction<boolean>>>(),
     trigger: function (key: string): void {
@@ -37,8 +53,33 @@ export default function Menus(props: Props): JSX.Element {
     lastTarget: props.menus[0],
   };
 
+  window.onscroll = function (): void {
+    if (window.pageYOffset > threshold) {
+      setSticky(true);
+
+      if (debounceFlag) return;
+      debounceFlag = true;
+
+      if (props.store.flicking) {
+        props.store.flicking.moveTo(
+          Math.floor((window.pageYOffset - threshold) / HEIGHT),
+          300
+        );
+      }
+
+      setTimeout(() => {
+        debounceFlag = false;
+      }, debounceTime);
+    } else {
+      setSticky(false);
+    }
+  };
+
   return (
-    <Wrapper innerHeight={props.innerHeight || 50}>
+    <Wrapper
+      innerHeight={props.innerHeight || 50}
+      className={sticky ? "sticky" : undefined}
+    >
       <Flicking
         duration={500}
         gap={10}

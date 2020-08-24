@@ -5,13 +5,18 @@ import styled from "styled-components";
 import Content from "./Content";
 
 const HEIGHT = 400;
-const THRESHOLD = 2800;
 
 const Wrapper = styled.div<{ innerHeight: number }>`
   width: 100%;
-  height: ${(props): number => props.innerHeight}px;
+`;
 
-  overflow-y: scroll;
+const Text = styled.div`
+  width: 100%;
+  height: 400px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 type Props = {
@@ -23,61 +28,16 @@ type Props = {
   menus: Array<string>;
 };
 
-const changeMenus = (scrollTop: number, props: Props): void => {
-  if (props.store.flicking) {
-    props.store.flicking.moveTo(Math.floor(scrollTop / HEIGHT), 300);
-  }
-};
-
-const focusToThis = (pageY: number): void => {
-  if (pageY > THRESHOLD) {
-    window.scroll({
-      behavior: "smooth",
-      top: THRESHOLD,
-    });
-  }
-};
-
 export default function List(props: Props): JSX.Element {
-  let element: HTMLDivElement;
-  let debounceFlag = false;
-  const debounceTime = 20;
-
   return (
-    <Wrapper
-      innerHeight={props.innerHeight || HEIGHT}
-      onScrollCapture={(
-        event: React.UIEvent<HTMLDivElement, UIEvent>
-      ): void => {
-        if (debounceFlag) return;
-        const { scrollTop } = event.target as HTMLDivElement;
-
-        debounceFlag = true;
-        changeMenus(scrollTop, props);
-
-        setTimeout(() => {
-          debounceFlag = false;
-        }, debounceTime);
-      }}
-      onTouchStart={(event: React.TouchEvent<HTMLDivElement>): void => {
-        // 불필요한 focusing을 막기 위해 List 컴포넌트의 위치를 이용해 분기
-        if (element) {
-          const { top } = element.getBoundingClientRect();
-
-          if (top > 110) {
-            const { pageY } = event.touches[0];
-
-            focusToThis(pageY);
-          }
-        }
-      }}
-      ref={(e: HTMLDivElement | null): void => {
-        if (e) element = e;
-      }}
-    >
+    <Wrapper innerHeight={props.innerHeight || HEIGHT}>
       {props.menus.map((menu, index) => (
-        <Content key={`${menu}.${index}`} height={HEIGHT}></Content>
+        <Content key={`${menu}.${index}`} innerHeight={HEIGHT}></Content>
       ))}
+
+      <Text>
+        <p>더이상 대표 상품이 없어요</p>
+      </Text>
     </Wrapper>
   );
 }
