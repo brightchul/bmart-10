@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "styled-components";
 import { useHistory } from "react-router-dom";
 import { Layout, ShadowBar } from "../components/common";
@@ -9,27 +9,45 @@ import {
   CartTotal,
   NotCartItem,
 } from "../components/cart";
-import { PopUpContext } from "../context";
+import { PopUpContext, CartContext } from "../context";
 import { MESSAGE } from "../constants/message";
-import { CartItemType } from "../types/Cart";
 
 const FakeComp = style.div`
   height: 80px;
 `;
 
 const Cart = (): JSX.Element => {
-  // totalPrice, deliveryTips - context api
-  // cartItemList - context api
-  const storage: string | null = localStorage.getItem("cart_list");
-  const data: Array<CartItemType> = JSON.parse(storage || "[]");
-  // console.log(data);
-  const isCart = data.length > 0 ? true : false; // 장바구니에 담긴 상품이 있는지 여부
+  // totalPrice, deliveryTips, cartItemList - context api
+  const cartDispatch = CartContext.useCartDispatch();
+
+  useEffect(() => {
+    cartDispatch({
+      type: "GET_CART",
+    });
+  }, []);
+
+  const cartData = CartContext.useCartState();
+  const {
+    cartList,
+    totalPrice,
+    deliveryTips,
+    checkItemAmount,
+    isAllChecked,
+  } = cartData;
+
+  const isCart = cartList.length > 0 ? true : false; // 장바구니에 담긴 상품이 있는지 여부
 
   const history = useHistory();
-  const dispatch = PopUpContext.usePopUpDispatch();
+  const popupDispatch = PopUpContext.usePopUpDispatch();
+
+  const onAllCheck = (): void => {
+    cartDispatch({
+      type: "ALL_CHECK_CART_ITEM",
+    });
+  };
 
   const goLoginPage = (): void => {
-    dispatch({ type: "POPUP_CLOSE" });
+    popupDispatch({ type: "POPUP_CLOSE" });
     history.push("/login");
   };
 
@@ -39,7 +57,7 @@ const Cart = (): JSX.Element => {
       // 구매하기
     } else {
       // 로그인 페이지로 유도
-      dispatch({
+      popupDispatch({
         type: "POPUP_OPEN",
         payload: {
           content: MESSAGE.LOGIN_INDUCE,
@@ -53,13 +71,17 @@ const Cart = (): JSX.Element => {
     <Layout>
       {isCart ? (
         <>
-          <CartHeader />
+          <CartHeader isAllChecked={isAllChecked} onCheck={onAllCheck} />
           <ShadowBar />
-          <CartList data={data} />
+          <CartList data={cartList} />
           <ShadowBar />
-          <CartTotal />
+          <CartTotal totalPrice={totalPrice} deliveryTips={deliveryTips} />
           <FakeComp />
-          <OrderBtn orderAction={orderAction} />
+          <OrderBtn
+            orderAction={orderAction}
+            totalPrice={totalPrice}
+            count={checkItemAmount}
+          />
         </>
       ) : (
         <NotCartItem />
