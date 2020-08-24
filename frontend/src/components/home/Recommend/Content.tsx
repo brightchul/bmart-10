@@ -7,7 +7,6 @@ const Wrapper = styled.div<{ innerHeight: number | undefined }>`
   width: 100%;
   ${(props): string | null =>
     props.innerHeight ? `height: ${props.innerHeight}px;` : null}
-  border: 1px solid #000;
 
   display: flex;
   flex-direction: column;
@@ -22,12 +21,12 @@ const Row = styled.div`
 `;
 
 type Props = {
-  height?: number;
+  innerHeight?: number;
 };
 
 export default function Content(props: Props): JSX.Element {
   return (
-    <Wrapper innerHeight={props.height}>
+    <Wrapper innerHeight={props.innerHeight}>
       <Row>
         <MainItem></MainItem>
         <MainItem></MainItem>
