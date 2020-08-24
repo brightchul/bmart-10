@@ -23,8 +23,8 @@ function onIntersection(
 }
 
 const Image = styled.div<Props>`
-  width:${(props) => props.width};
-  height:${(props) => props.height};
+  width:${(props): string => props.width};
+  height:${(props): string => props.height};
   
   background-image: url("${(props): string => props.imageURL}");
   background-repeat: no-repeat;
