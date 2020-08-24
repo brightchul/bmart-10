@@ -1,3 +1,4 @@
-import * as PopUpContext from "./popupContext";
+import * as PopUpContext from "./PopupContext";
+import * as CartContext from "./CartContext";
 
-export { PopUpContext };
+export { PopUpContext, CartContext };

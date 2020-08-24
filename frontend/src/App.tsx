@@ -1,13 +1,15 @@
 import React from "react";
 import Router from "./router";
 import { PopUp } from "./components/common";
-import { PopUpContext } from "./context";
+import { PopUpContext, CartContext } from "./context";
 
 function App(): JSX.Element {
   return (
     <div className="App">
       <PopUpContext.PopUpProvider>
-        <Router />
+        <CartContext.CartProvider>
+          <Router />
+        </CartContext.CartProvider>
         <PopUp />
       </PopUpContext.PopUpProvider>
     </div>
