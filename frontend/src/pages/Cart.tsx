@@ -9,7 +9,7 @@ import {
   CartTotal,
   NotCartItem,
 } from "../components/cart";
-import { PopUpContext, CartContext } from "../context";
+import { PopUpContext, CartContext } from "../contexts";
 import { MESSAGE } from "../constants/message";
 
 const FakeComp = style.div`

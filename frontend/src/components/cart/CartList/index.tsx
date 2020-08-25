@@ -3,7 +3,7 @@ import style from "styled-components";
 
 import CartItem from "./CartItem";
 import { CartItemType } from "../../../types/Cart";
-import { CartContext } from "../../../context";
+import { CartContext } from "../../../contexts";
 
 const ListWrapper = style.div`
   width: 100%;
