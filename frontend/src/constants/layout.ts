@@ -10,3 +10,7 @@ export const PULL_TO = {
   SIZE: 150,
   THRESHOLD: 100,
 };
+
+export const RECOMMEND_SECTION = {
+  SIZE: 500,
+};

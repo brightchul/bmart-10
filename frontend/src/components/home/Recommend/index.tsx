@@ -32,19 +32,15 @@ const dummyMenuData = [
 ];
 
 export default function Recommend(): JSX.Element {
-  const store = {
-    flicking: undefined,
-  };
   const screeHeight = screen.height;
   const MenusHeight = 30;
 
   return (
     <Wrapper>
       <Header />
-      <Menus innerHeight={MenusHeight} menus={dummyMenuData} store={store} />
+      <Menus innerHeight={MenusHeight} menus={dummyMenuData} />
       <List
         innerHeight={screeHeight - (HEADER.SIZE + FOOTER.SIZE + MenusHeight)}
-        store={store}
         menus={dummyMenuData}
       />
     </Wrapper>
