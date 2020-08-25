@@ -29,6 +29,8 @@ export default function SearchBar(): JSX.Element {
 
   function search(query: string): void {
     setHistory(query);
+    history.pushState({}, "", `?query=${query}`);
+
     dispatch({ type: "SET_SHOW_HISTORY", showHistory: false });
 
     getGoodsByName(query).then((res) => {
@@ -94,8 +96,6 @@ export default function SearchBar(): JSX.Element {
           onClick={(): void => {
             if (query.length === 0) return;
             search(query);
-
-            history.pushState({}, "", `?query=${query}`);
           }}
         />
       </FixedBox>
