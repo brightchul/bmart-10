@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import FixedBox from "./FixedBox";
@@ -37,6 +37,15 @@ export default function SearchBar(): JSX.Element {
       }
     });
   }
+
+  useEffect(() => {
+    const parsedUrl = new URL(window.location.href);
+    const query = parsedUrl.searchParams.get("query");
+
+    if (query) {
+      search(query);
+    }
+  }, []);
 
   function updateFilter(event: React.KeyboardEvent<HTMLInputElement>): void {
     const filter = (event.target as HTMLInputElement).value;
@@ -85,6 +94,8 @@ export default function SearchBar(): JSX.Element {
           onClick={(): void => {
             if (query.length === 0) return;
             search(query);
+
+            history.pushState({}, "", `?query=${query}`);
           }}
         />
       </FixedBox>
