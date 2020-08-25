@@ -82,6 +82,8 @@ class GoodsDAO extends DAO {
       });
     }
 
+    connection.release();
+
     return result;
   }
 }
