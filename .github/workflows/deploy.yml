@@ -14,6 +14,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: frontend server CD
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.FRONTEND_HOST }}
+          username: ${{ secrets.FRONTEND_USERNAME }}
+          key: ${{ secrets.FRONTEND_KEY }}
+          script: |
+            sh deploy.sh
+
       - name: stop server via ssh and build
         uses: appleboy/ssh-action@master
         with:
@@ -21,12 +30,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            pm2 stop bmart-server
-            cd project/bmart-10
-            git pull origin release
-            cd /frontend
-            yarn install
-            yarn build
-            cd ../backend
-            yarn install
-            pm2 start bmart-server
+            sh deploy.sh
