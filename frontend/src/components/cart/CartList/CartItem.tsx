@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "styled-components";
 
 import { COLOR } from "../../../constants/style";
@@ -85,30 +85,35 @@ const CounterItem = style.div`
   align-items: center;
 `;
 
-const CartItem = (props: CartItemType): JSX.Element => {
-  const { name, cost, discount, cnt, imageUrl, isChecked } = props;
-  // const [isChecked, setIsChecked] = useState(isChecked);
-  // const [count, setCount] = useState(0);
+const CounterButton = style.button`
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+`;
 
-  const onChecked = (): void => {
-    // setIsChecked((state) => !state);
-  };
+type Props = {
+  data: CartItemType;
+  onCheck: (id: number) => void;
+  onIncrease: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: number
+  ) => void;
+  onDecrease: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: number
+  ) => void;
+};
 
-  const minusAction = (): void => {
-    // if (cnt < 1) return;
-    // setCount((state) => state - 1);
-  };
-
-  const plusAction = (): void => {
-    // setCount((state) => state + 1);
-  };
-
+const CartItem = (props: Props): JSX.Element => {
+  const { data, onCheck, onIncrease, onDecrease } = props;
+  const { id, name, cost, discount, cnt, imageUrl, isChecked } = data;
   const salePrice = cost - Math.round(cost * (discount * 0.01));
 
   return (
     <ItemWrapper>
       <TitleWrapper>
-        <CheckBoxWrapper onClick={onChecked}>
+        <CheckBoxWrapper onClick={(): void => onCheck(id)}>
           <CheckBox isChecked={isChecked} />
           <p>{name}</p>
         </CheckBoxWrapper>
@@ -131,9 +136,24 @@ const CartItem = (props: CartItemType): JSX.Element => {
             </SaleWrapper>
           </div>
           <ChangeCounter>
-            <CounterItem onClick={minusAction}>ㅡ</CounterItem>
+            <CounterButton
+              name="minus"
+              style={{ color: cnt === 1 ? COLOR.GREY_3 : COLOR.BLACK }}
+              onClick={(
+                e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              ): void => onDecrease(e, id)}
+            >
+              ㅡ
+            </CounterButton>
             <CounterItem>{cnt}</CounterItem>
-            <CounterItem onClick={plusAction}>+</CounterItem>
+            <CounterButton
+              name="plus"
+              onClick={(
+                e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              ): void => onIncrease(e, id)}
+            >
+              +
+            </CounterButton>
           </ChangeCounter>
         </PriceWrapper>
       </ContentWrapper>

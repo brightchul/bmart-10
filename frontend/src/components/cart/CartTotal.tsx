@@ -7,11 +7,6 @@ type RowType = {
   justifyAttr?: string;
 };
 
-type Props = {
-  totalPrice: number;
-  deliveryTips: number;
-};
-
 const TotalWrapper = style.div`
   width: 100%;
   padding: 15px;
@@ -32,6 +27,11 @@ const Price = style.div`
 const Limit = style.div`
   color: ${COLOR.RED};
 `;
+
+type Props = {
+  totalPrice: number;
+  deliveryTips: number;
+};
 
 const CartTotal = (props: Props): JSX.Element => {
   const { totalPrice, deliveryTips } = props;

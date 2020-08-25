@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "styled-components";
 
 import { CheckBox } from "../common";
@@ -20,25 +20,28 @@ const ToggleTitle = style.p`
   margin-left: 5px;
 `;
 
-const CartHeader = (): JSX.Element => {
-  const [check, setCheck] = useState(false);
-  const [toggleTitle, setToggleTitle] = useState("모두 선택");
+type Props = {
+  isAllChecked: boolean;
+  onCheck: () => void;
+};
 
-  const onCheck = (): void => {
-    setToggleTitle("선택 해제");
-    if (check) setToggleTitle("모두 선택");
-    setCheck((state) => !state);
-  };
+const CartHeader = (props: Props): JSX.Element => {
+  const { isAllChecked, onCheck } = props;
 
   return (
     <HeaderWrapper>
       <ToggleCheck onClick={onCheck}>
-        <CheckBox isChecked={check} />
-        <ToggleTitle>{toggleTitle}</ToggleTitle>
+        <CheckBox isChecked={isAllChecked} />
+        <ToggleTitle>{isAllChecked ? "선택 해제" : "모두 선택"}</ToggleTitle>
       </ToggleCheck>
       <p>선택 비우기</p>
     </HeaderWrapper>
   );
+};
+
+CartHeader.defaultProps = {
+  isAllChecked: false,
+  onCheck: null,
 };
 
 export default CartHeader;

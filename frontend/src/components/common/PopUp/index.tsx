@@ -2,7 +2,7 @@ import React from "react";
 import style from "styled-components";
 import { COLOR, SVG } from "../../../constants/style";
 import Svg from "../Svg";
-import { PopUpContext } from "../../../context";
+import { PopUpContext } from "../../../contexts";
 
 type Props = {
   onClose: () => void;

@@ -1,40 +1,42 @@
 import React from "react";
 import styled from "styled-components";
 
-import MainItem from "../MainItem";
+import { Good } from "../../../types/RecommandGoods";
+
+import Goods from "./Goods";
 
 const Wrapper = styled.div<{ innerHeight: number | undefined }>`
   width: 100%;
   ${(props): string | null =>
     props.innerHeight ? `height: ${props.innerHeight}px;` : null}
-  border: 1px solid #000;
 
   display: flex;
   flex-direction: column;
 `;
 
 const Row = styled.div`
-  width: calc(100% - 70px);
-  margin: 10px 35px 10px 35px;
+  width: calc(100% - 20px);
+  margin: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
 
 type Props = {
-  height?: number;
+  goodsData: Good[];
+  innerHeight?: number;
 };
 
 export default function Content(props: Props): JSX.Element {
   return (
-    <Wrapper innerHeight={props.height}>
+    <Wrapper innerHeight={props.innerHeight}>
       <Row>
-        <MainItem></MainItem>
-        <MainItem></MainItem>
+        <Goods {...props.goodsData[0]} />
+        <Goods {...props.goodsData[1]} />
       </Row>
       <Row>
-        <MainItem></MainItem>
-        <MainItem></MainItem>
+        <Goods {...props.goodsData[2]} />
+        <Goods {...props.goodsData[3]} />
       </Row>
     </Wrapper>
   );

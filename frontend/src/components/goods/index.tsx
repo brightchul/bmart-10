@@ -22,7 +22,7 @@ import ReturnExchangeInfo from "./ReturnExchangeInfo";
 import InfoSummary from "./InfoSummary";
 import Counter from "./Counter";
 import { CartItemType } from "../../types/Cart";
-import { PopUpContext } from "../../context";
+import { PopUpContext } from "../../contexts";
 import { MESSAGE } from "../../constants/message";
 
 const Container = styled.div`
@@ -87,7 +87,7 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
           },
         ];
       }
-      
+
       // 로그인 전인 경우.. 로그인 후의 경우를 추가해주어야 함.
       localStorage.setItem("cart_list", JSON.stringify(updateData));
 
