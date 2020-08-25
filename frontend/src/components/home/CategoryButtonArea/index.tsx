@@ -5,7 +5,12 @@ import CategoryButton from "./CategoryButton";
 import CategoryHeader from "./CategoryButtonsHeader";
 import { CATEGORY_TITLE_NAMES } from "../../../constants/message";
 
-const categoryTitleArr = CATEGORY_TITLE_NAMES.slice(0, 10).map((o) => o.title);
+const categoryTitleArr = CATEGORY_TITLE_NAMES.slice(0, 10).map(
+  ({ title, name }) => ({
+    title,
+    name,
+  })
+);
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,10 +27,14 @@ function Category(): JSX.Element {
     <Container>
       <CategoryHeader></CategoryHeader>
       <Wrapper>
-        {categoryTitleArr.map((title, idx) => {
+        {categoryTitleArr.map(({ title, name }, idx) => {
           return (
-            <Link key={title + idx} to={`/category/${title}`}>
-              <CategoryButton key={idx + ""} keyName={title}></CategoryButton>
+            <Link key={title + idx} to={`/category/${name}`}>
+              <CategoryButton
+                key={idx + ""}
+                keyName={name}
+                keyTitle={title}
+              ></CategoryButton>
             </Link>
           );
         })}

@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { CATEGORY_TITLE_NAMES } from "../../../constants/message";
 
 type KeyName = {
   [key: string]: { [name: string]: string };
@@ -50,9 +49,14 @@ const ButtonTitle = styled.p`
   word-break: keep-all;
 `;
 
-function CategoryButton({ keyName }: { keyName: string }): JSX.Element {
-  const imagePath = `/asset/icon/${keyName}.svg`;
-  console.log(keyName);
+function CategoryButton({
+  keyTitle,
+  keyName,
+}: {
+  keyTitle: string;
+  keyName: string;
+}): JSX.Element {
+  const imagePath = `/asset/icon/${keyTitle}.svg`;
   return (
     <ButtonWrapper>
       <div>
@@ -60,9 +64,7 @@ function CategoryButton({ keyName }: { keyName: string }): JSX.Element {
           <ButtonImg src={imagePath}></ButtonImg>
         </ButtonImgWrapper>
       </div>
-      <ButtonTitle>
-        {CATEGORY_TITLE_NAMES.find((o) => o.title === keyName)?.name}
-      </ButtonTitle>
+      <ButtonTitle>{keyName}</ButtonTitle>
     </ButtonWrapper>
   );
 }

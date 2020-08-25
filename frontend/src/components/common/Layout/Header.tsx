@@ -43,7 +43,8 @@ const getCategoryName = (
 };
 
 const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
-  const categoryName = getCategoryName(mainCategory, subCategory);
+  // const categoryName = getCategoryName(mainCategory, subCategory);
+  const categoryName = "";
   const history = useHistory();
 
   return (
