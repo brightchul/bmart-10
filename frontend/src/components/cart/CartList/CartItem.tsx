@@ -1,16 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "styled-components";
 
 import { COLOR } from "../../../constants/style";
 import { CheckBox } from "../../common";
-
-type Item = {
-  goodId?: number;
-  title: string;
-  price: string;
-  sale: string;
-  src: string;
-};
+import { CartItemType } from "../../../types/Cart";
 
 const ItemWrapper = style.div`
   width: 100%;
@@ -92,58 +85,75 @@ const CounterItem = style.div`
   align-items: center;
 `;
 
-const CartItem = (props: Item): JSX.Element => {
-  const { title, price, sale, src } = props;
-  const [isChecked, setIsChecked] = useState(false);
-  const [cnt, setCount] = useState(0);
+const CounterButton = style.button`
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+`;
 
-  const percent: number = parseInt(sale) || 0;
+type Props = {
+  data: CartItemType;
+  onCheck: (id: number) => void;
+  onIncrease: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: number
+  ) => void;
+  onDecrease: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: number
+  ) => void;
+};
 
-  const onChecked = (): void => {
-    setIsChecked((state) => !state);
-  };
-
-  const minusAction = (): void => {
-    if (cnt < 1) return;
-    setCount((state) => state - 1);
-  };
-
-  const plusAction = (): void => {
-    setCount((state) => state + 1);
-  };
-
-  const salePrice =
-    parseInt(price) - Math.round(parseInt(price) * (percent * 0.01));
+const CartItem = (props: Props): JSX.Element => {
+  const { data, onCheck, onIncrease, onDecrease } = props;
+  const { id, name, cost, discount, cnt, imageUrl, isChecked } = data;
+  const salePrice = cost - Math.round(cost * (discount * 0.01));
 
   return (
     <ItemWrapper>
       <TitleWrapper>
-        <CheckBoxWrapper onClick={onChecked}>
+        <CheckBoxWrapper onClick={(): void => onCheck(id)}>
           <CheckBox isChecked={isChecked} />
-          <p>{title}</p>
+          <p>{name}</p>
         </CheckBoxWrapper>
         <DeleteBtn>삭제</DeleteBtn>
       </TitleWrapper>
       <ContentWrapper>
         <ImgWrapper>
-          <img src={src} />
+          <img src={imageUrl} />
         </ImgWrapper>
         <PriceWrapper>
           <div>
-            <Price>({price}원)</Price>
+            <Price>({cost}원)</Price>
             <SaleWrapper>
-              {percent !== 0 && (
+              {discount !== 0 && (
                 <Price style={{ textDecoration: "line-through" }}>
-                  {price}원
+                  {cost}원
                 </Price>
               )}
               <Sale>{salePrice}원</Sale>
             </SaleWrapper>
           </div>
           <ChangeCounter>
-            <CounterItem onClick={minusAction}>ㅡ</CounterItem>
+            <CounterButton
+              name="minus"
+              style={{ color: cnt === 1 ? COLOR.GREY_3 : COLOR.BLACK }}
+              onClick={(
+                e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              ): void => onDecrease(e, id)}
+            >
+              ㅡ
+            </CounterButton>
             <CounterItem>{cnt}</CounterItem>
-            <CounterItem onClick={plusAction}>+</CounterItem>
+            <CounterButton
+              name="plus"
+              onClick={(
+                e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              ): void => onIncrease(e, id)}
+            >
+              +
+            </CounterButton>
           </ChangeCounter>
         </PriceWrapper>
       </ContentWrapper>

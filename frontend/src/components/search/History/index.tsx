@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
+import { getHistory } from "../../../utils/localstorage";
+import { useSearchState } from "../../../contexts/SearchContext";
+
 import HistoryText from "./HistoryText";
 
 const Wrapper = styled.div`
@@ -8,10 +11,17 @@ const Wrapper = styled.div`
 `;
 
 export default function SearchBar(): JSX.Element {
+  const state = useSearchState();
+
   return (
     <Wrapper>
-      <HistoryText>더미 검색 1</HistoryText>
-      <HistoryText>더미 검색 2</HistoryText>
+      {state.showHistory
+        ? getHistory()
+            .reverse()
+            .map((history, index) => (
+              <HistoryText key={`history.${index}`}>{history}</HistoryText>
+            ))
+        : null}
     </Wrapper>
   );
 }

@@ -6,7 +6,7 @@ import goodsDAO from "../daos/goods.dao";
 const router = Router();
 
 /**
- * @api {get} /api/goods/:name 상품 이름으로 검색
+ * @api {get} /api/goods/query/:query 상품 이름으로 검색
  * @apiName Goods by Name
  * @apiGroup Goods
  *
@@ -20,7 +20,7 @@ const router = Router();
  *     {
  *       "success": true,
  *       "data" : {
- *         "rows" : Goods[]
+ *         "goods" : Goods[]
  *       }
  *     }
  *
@@ -32,19 +32,19 @@ const router = Router();
  *       "success": false,
  *     }
  */
-router.get("/:name", async (request: Request, response: Response) => {
-  const { name } = request.params;
+router.get("/query/:query", async (request: Request, response: Response) => {
+  const { query } = request.params;
   const apiResponse: APIResponse = {
     success: false,
   };
 
-  if (!name) {
+  if (!query) {
     response.status(404).send(apiResponse);
 
     return;
   }
 
-  const result = await goodsDAO.search(name);
+  const result = await goodsDAO.search(query);
   apiResponse.success = true;
   apiResponse.data = {
     goods: result,

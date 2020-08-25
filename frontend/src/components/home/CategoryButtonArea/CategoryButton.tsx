@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { KEY_NAME } from "../../../constants/message";
+import { CATEGORY_TITLE_NAMES } from "../../../constants/message";
 
 type KeyName = {
   [key: string]: { [name: string]: string };
@@ -47,11 +47,12 @@ const ButtonImg = styled.img`
 const ButtonTitle = styled.p`
   margin-top: 5px;
   font-size: 0.7em;
+  word-break: keep-all;
 `;
 
 function CategoryButton({ keyName }: { keyName: string }): JSX.Element {
   const imagePath = `/asset/icon/${keyName}.svg`;
-
+  console.log(keyName);
   return (
     <ButtonWrapper>
       <div>
@@ -59,7 +60,9 @@ function CategoryButton({ keyName }: { keyName: string }): JSX.Element {
           <ButtonImg src={imagePath}></ButtonImg>
         </ButtonImgWrapper>
       </div>
-      <ButtonTitle>{KEY_NAME[keyName].name}</ButtonTitle>
+      <ButtonTitle>
+        {CATEGORY_TITLE_NAMES.find((o) => o.title === keyName)?.name}
+      </ButtonTitle>
     </ButtonWrapper>
   );
 }

@@ -8,6 +8,9 @@ import express, { Request, Response, NextFunction } from "express";
 import { BAD_REQUEST } from "http-status-codes";
 import "express-async-errors";
 
+import passport from "passport";
+import passportConfig from "./util/passport";
+
 import BaseRouter from "./apis";
 
 // Init express
@@ -16,6 +19,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(passport.initialize());
+passportConfig();
 
 app.use(
   cors({

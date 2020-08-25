@@ -8,6 +8,7 @@ import DeleteButton from "./DeleteButton";
 
 import { useSearchDispatch } from "../../../contexts/SearchContext";
 
+import { setHistory } from "../../../utils/localstorage";
 import getGoodsByName from "../../../fetch/goods/getGoodsByName";
 
 const Wrapper = styled.div`
@@ -25,6 +26,17 @@ export default function SearchBar(): JSX.Element {
   const [query, setQuery] = useState("");
 
   const dispatch = useSearchDispatch();
+
+  function search(query: string): void {
+    setHistory(query);
+    dispatch({ type: "SET_SHOW_HISTORY", showHistory: false });
+
+    getGoodsByName(query).then((res) => {
+      if (res.success) {
+        dispatch({ type: "SET_GOODS", goods: res.data.goods });
+      }
+    });
+  }
 
   function updateFilter(event: React.KeyboardEvent<HTMLInputElement>): void {
     const filter = (event.target as HTMLInputElement).value;
@@ -51,21 +63,28 @@ export default function SearchBar(): JSX.Element {
     setShowDelete(false);
   }
 
+  function searchByEnter(event: React.KeyboardEvent<HTMLInputElement>): void {
+    if (event.keyCode !== 13) return;
+
+    search(query);
+  }
+
   return (
     <Wrapper>
       <FixedBox>
-        <Input placeholder="상품 검색" onKeyUp={updateFilter} />
+        <Input
+          placeholder="상품 검색"
+          onKeyUp={updateFilter}
+          onKeyDown={searchByEnter}
+          onClick={(): void => {
+            dispatch({ type: "SET_SHOW_HISTORY", showHistory: true });
+          }}
+        />
         <DeleteButton onClick={deleteFilter} show={showDelete} />
-
         <SearchIcon
           onClick={(): void => {
             if (query.length === 0) return;
-
-            getGoodsByName(query).then((res) => {
-              if (res.success) {
-                dispatch({ type: "SET_GOODS", goods: res.data.goods });
-              }
-            });
+            search(query);
           }}
         />
       </FixedBox>

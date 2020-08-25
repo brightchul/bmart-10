@@ -78,7 +78,11 @@ const NavItem = (props: Props): JSX.Element => {
   const { path, name, svg } = props;
   return (
     <NavLink exact to={path} activeClassName="nav_selected" className="nav">
-      <Item>
+      <Item
+        onClick={(): void => {
+          window.onscroll = null;
+        }}
+      >
         <Svg size={36} fill={COLOR.GREY_2} path={svg} />
         <p>{name}</p>
       </Item>

@@ -2,10 +2,6 @@ import React from "react";
 import style from "styled-components";
 import { COLOR } from "../../constants/style";
 
-type Props = {
-  orderAction: () => void;
-};
-
 const BtnWrapper = style.div`
   width: 100%;
   padding: 15px;
@@ -15,8 +11,8 @@ const BtnWrapper = style.div`
 
 const Btn = style.button`
   width: 100%;
-  border: 1px solid ${COLOR.YELLOW_1};
-  background: ${COLOR.WHITE};
+  border: 1px solid ${COLOR.GREEN_1};
+  background: ${COLOR.GREEN_1};
   padding: 10px;
   border-radius: 5px;
   font-weight: 600;
@@ -31,8 +27,8 @@ const Btn = style.button`
 const Count = style.div`
   width: 25px;
   height: 25px;
-  background: ${COLOR.YELLOW_1};
-  color: ${COLOR.WHITE};
+  background: ${COLOR.WHITE};
+  color: ${COLOR.GREEN_1};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,13 +37,17 @@ const Count = style.div`
 `;
 
 const Price = style.div`
-  color: ${COLOR.BLACK};
+  color: ${COLOR.WHITE};
 `;
 
+type Props = {
+  orderAction: () => void;
+  totalPrice: number;
+  count: number;
+};
+
 const OrderBtn = (props: Props): JSX.Element => {
-  const { orderAction } = props;
-  const count = 0;
-  const totalPrice = 0;
+  const { orderAction, totalPrice, count } = props;
 
   return (
     <BtnWrapper>
@@ -57,6 +57,11 @@ const OrderBtn = (props: Props): JSX.Element => {
       </Btn>
     </BtnWrapper>
   );
+};
+
+OrderBtn.defaultProps = {
+  totalPrice: 0,
+  count: 0,
 };
 
 export default OrderBtn;

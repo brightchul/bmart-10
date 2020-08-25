@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import {
   EtcInfo,
   ButtonArea,
@@ -13,15 +15,15 @@ import {
   ItemImg,
   ItemContent,
 } from "./StyleComponent";
-import { useHistory } from "react-router-dom";
 import { getItem, ItemType } from "../../mock";
 import MainItem from "../home/MainItem";
 import DeliveryInfo from "./DeliveryInfo";
 import ReturnExchangeInfo from "./ReturnExchangeInfo";
 import InfoSummary from "./InfoSummary";
 import Counter from "./Counter";
-
-import styled from "styled-components";
+import { CartItemType } from "../../types/Cart";
+import { PopUpContext } from "../../contexts";
+import { MESSAGE } from "../../constants/message";
 
 const Container = styled.div`
   margin-top: -15px;
@@ -40,7 +42,71 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
   const [yPercent, setYPercent] = useState({ y: "100%" });
   const [count, setCount] = useState(1);
 
+  const dispatch = PopUpContext.usePopUpDispatch();
   const history = useHistory();
+
+  const makeCartItem = (item: ItemType): CartItemType => {
+    const goodId = item.goodId || 0;
+    const updateItem: CartItemType = {
+      id: goodId,
+      name: item.title,
+      cost: parseInt(item.price),
+      discount: parseInt(item.sale),
+      imageUrl: item.src,
+      isChecked: true,
+      cnt: count,
+    };
+
+    return updateItem;
+  };
+
+  const addCart = (): void => {
+    setYPercent({ y: "100%" });
+    if (item) {
+      const storage: string | null = localStorage.getItem("cart_list");
+      const data: Array<CartItemType> = JSON.parse(storage || "[]");
+      const updateItem: CartItemType = makeCartItem(item);
+
+      let updateData = [...data, updateItem];
+      // cart list에 이미 있는 상품인지 검사
+      const isItemCheck = data.filter(
+        (cart): CartItemType | boolean => cart.id === item.goodId
+      );
+
+      if (isItemCheck.length > 0) {
+        const prevData = isItemCheck[0];
+        const prevCount = prevData.cnt;
+        const removeData = data.filter(
+          (cart): CartItemType | boolean => cart.id !== item.goodId
+        );
+        updateData = [
+          ...removeData,
+          {
+            ...updateItem,
+            cnt: count + prevCount,
+          },
+        ];
+      }
+
+      // 로그인 전인 경우.. 로그인 후의 경우를 추가해주어야 함.
+      localStorage.setItem("cart_list", JSON.stringify(updateData));
+
+      // 상품이 담겼다는 메세지 추가
+      const goCartPage = (): void => {
+        dispatch({ type: "POPUP_CLOSE" });
+        history.push("/cart");
+      };
+
+      dispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: MESSAGE.ADD_CART,
+          confirmAction: goCartPage,
+        },
+      });
+    }
+  };
+
   return (
     <Container>
       <MainItem width="100%" padding="0.5em 1em" {...item}></MainItem>
@@ -76,7 +142,7 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
             </ItemInfo>
             <Counter setCount={setCount} count={count}></Counter>
           </ItemContent>
-          <BagButton onClick={(): void => history.goBack()}>
+          <BagButton onClick={addCart}>
             <span>{count}개 담기 </span>
             <RightSpan>{count * price}원</RightSpan>
           </BagButton>

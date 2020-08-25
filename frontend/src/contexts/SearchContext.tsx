@@ -4,9 +4,12 @@ import { Good } from "../types/Good";
 
 type State = {
   searchResult: Good[];
+  showHistory: boolean;
 };
 
-type Action = { type: "SET_GOODS"; goods: Good[] };
+type Action =
+  | { type: "SET_GOODS"; goods: Good[] }
+  | { type: "SET_SHOW_HISTORY"; showHistory: boolean };
 
 type SampleDispatch = Dispatch<Action>;
 
@@ -17,7 +20,13 @@ function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "SET_GOODS":
       return {
+        ...state,
         searchResult: action.goods,
+      };
+    case "SET_SHOW_HISTORY":
+      return {
+        ...state,
+        showHistory: action.showHistory,
       };
     default:
       throw new Error("Unhandled action");
@@ -30,6 +39,7 @@ export function SearchProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const [state, dispatch] = useReducer(reducer, {
+    showHistory: false,
     searchResult: [],
   });
 

@@ -23,6 +23,8 @@
 
 B마트보다 조금 더 나은 마트! B+ 마트 입니다.
 
+## [B+마트로 이동하기 🚴🏻‍♀️🚴🏻🚴🏻‍♂️](http://3.35.51.138/)
+
 ## 📌 프로젝트 소개
 
 저희 프로젝트를 소개합니다.
@@ -135,9 +137,14 @@ REACT_APP_API_HOST=
 ### backend 설정 파일 .env
 
 ```sh
+NODE_ENV=
+
 # Server
 PORT=
 HOST=
+
+# Passport
+JWT_SECRET=
 
 # Database Server
 DB_HOST=
@@ -145,6 +152,13 @@ DB_PORT=
 DB_USER=
 DB_PASSWORD=
 DB_NAME=
+
+# Test Database Server
+TEST_DB_HOST=
+TEST_DB_PORT=
+TEST_DB_USER=
+TEST_DB_PASSWORD=
+TEST_DB_NAME=
 ```
 
 ## 🥴 Support

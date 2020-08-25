@@ -12,7 +12,7 @@ type CategoryType = {
 };
 
 export const KEY_NAME: CategoryType = {
-  bread: {
+  bakery: {
     name: "빵 시리얼 잼",
     subCategory: {
       bread: { name: "빵" },
@@ -57,4 +57,28 @@ export const KEY_NAME: CategoryType = {
 
 export const MESSAGE = {
   LOGIN_INDUCE: "로그인 후 주문이 가능합니다. \n 로그인 후 주문하시겠습니까?",
+  ADD_CART:
+    "장바구니에 상품을 담았습니다. \n 장바구니 페이지로 이동하시겠습니까?",
 };
+
+type CategoryTitleName = { name: string; title: string };
+
+export const CATEGORY_TITLE_NAMES: Array<CategoryTitleName> = [
+  { name: "과일·견과·쌀", title: "fruit" },
+  { name: "면·양념·오일", title: "noodle" },
+  { name: "반려동물", title: "animal" },
+  { name: "베이비·키즈", title: "baby" },
+  { name: "베이커리·치즈", title: "bakery" },
+  { name: "뷰티·바디케어", title: "beauty" },
+  { name: "샐러드·간편식", title: "salad" },
+  { name: "수산·해산·건어물", title: "seafood" },
+  { name: "정육·계란", title: "meat" },
+  { name: "채소", title: "vegetable" },
+
+  { name: "가전제품", title: "electrical" },
+  { name: "건강식품", title: "healthfood" },
+  { name: "생활용품·리빙", title: "living" },
+  { name: "국·반찬·메인요리", title: "soup" },
+  { name: "음료·우유·떡·간식", title: "drink" },
+  { name: "주방용품", title: "kitchen" },
+];

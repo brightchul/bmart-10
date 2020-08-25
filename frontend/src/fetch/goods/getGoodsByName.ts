@@ -15,7 +15,7 @@ export type APIResponse =
 export default async function getGoodsByName(
   query: string
 ): Promise<APIResponse> {
-  return await fetch(`${API_HOST}/api/goods/${query}`, {
+  return await fetch(`${API_HOST}/api/goods/query/${query}`, {
     mode: "cors",
     method: "GET",
   }).then((res) => res.json());
