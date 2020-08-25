@@ -3,10 +3,10 @@ import { CartItemType } from "../types/Cart";
 
 type Cart = {
   cartList: Array<CartItemType>;
-  totalPrice?: number | undefined;
-  deliveryTips?: number | undefined;
-  checkItemAmount?: number | undefined;
-  isAllChecked?: boolean | undefined;
+  totalPrice: number;
+  deliveryTips: number;
+  checkItemAmount: number;
+  isAllChecked: boolean;
 };
 
 type CartState = {
@@ -180,22 +180,22 @@ const reducer = (state: Cart, action: Action): Cart => {
       };
     }
     case "UPDATE_CART": {
-      const updateCartItem = state.cartList.filter(
+      const updateCartItem: CartItemType | undefined = state.cartList.find(
         (item) => item.id === action.payload.id
       );
       const removeCheckCartItem = state.cartList.filter(
         (item) => item.id !== action.payload.id
       );
+      let updateCartList = [...removeCheckCartItem];
       let cnt = 0;
-      if (action.payload.type === "plus") {
-        cnt = updateCartItem[0].cnt + 1;
-      } else {
-        cnt = updateCartItem[0].cnt < 2 ? 1 : updateCartItem[0].cnt - 1;
+      if (updateCartItem) {
+        if (action.payload.type === "plus") {
+          cnt = updateCartItem.cnt + 1;
+        } else {
+          cnt = updateCartItem.cnt < 2 ? 1 : updateCartItem.cnt - 1;
+        }
+        updateCartList = [...removeCheckCartItem, { ...updateCartItem, cnt }];
       }
-      const updateCartList = [
-        ...removeCheckCartItem,
-        { ...updateCartItem[0], cnt },
-      ];
 
       const {
         totalPrice,
@@ -212,17 +212,39 @@ const reducer = (state: Cart, action: Action): Cart => {
       };
     }
     case "REMOVE_CART": {
-      const removeCheckCartItem = state.cartList.filter(
+      const removeCartItem = state.cartList.filter(
         (item) => item.id !== action.payload.id
       );
-      const { totalPrice, checkItemAmount, deliveryTips } = getUpdateState(
-        removeCheckCartItem
+      const {
+        totalPrice,
+        checkItemAmount,
+        deliveryTips,
+        isAllChecked,
+      } = getUpdateState(removeCartItem);
+      return {
+        cartList: removeCartItem,
+        totalPrice,
+        deliveryTips,
+        checkItemAmount,
+        isAllChecked,
+      };
+    }
+    case "REMOVE_CHECKED_CART": {
+      const removeCheckCartItem = state.cartList.filter(
+        (item) => !item.isChecked
       );
+      const {
+        totalPrice,
+        checkItemAmount,
+        deliveryTips,
+        isAllChecked,
+      } = getUpdateState(removeCheckCartItem);
       return {
         cartList: removeCheckCartItem,
         totalPrice,
         deliveryTips,
         checkItemAmount,
+        isAllChecked,
       };
     }
     case "CHECK_CART_ITEM": {
