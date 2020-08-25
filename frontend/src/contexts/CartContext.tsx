@@ -24,6 +24,7 @@ type Action =
       type: "ADD_CART";
       payload: {
         data: CartItemType;
+        count: number;
       };
     }
   | {
@@ -140,8 +141,44 @@ const reducer = (state: Cart, action: Action): Cart => {
         isAllChecked,
       };
     }
-    case "ADD_CART":
-      return state;
+    case "ADD_CART": {
+      const updateItem = action.payload.data;
+      let updateCartList = [...state.cartList, updateItem];
+      console.log(action.payload);
+
+      // cart list에 이미 있는 상품인지 검사
+      const isItemCheck = state.cartList.find(
+        (cart): CartItemType | boolean => cart.id === updateItem.id
+      );
+      if (isItemCheck) {
+        const prevData = isItemCheck;
+        const prevCount = prevData.cnt;
+        const removeData = state.cartList.filter(
+          (cart): CartItemType | boolean => cart.id !== updateItem.id
+        );
+        updateCartList = [
+          ...removeData,
+          {
+            ...updateItem,
+            cnt: action.payload.count + prevCount,
+          },
+        ];
+      }
+
+      const {
+        totalPrice,
+        checkItemAmount,
+        deliveryTips,
+        isAllChecked,
+      } = getUpdateState(updateCartList);
+      return {
+        cartList: updateCartList,
+        totalPrice,
+        deliveryTips,
+        checkItemAmount,
+        isAllChecked,
+      };
+    }
     case "UPDATE_CART": {
       const updateCartItem = state.cartList.filter(
         (item) => item.id === action.payload.id
