@@ -3,10 +3,10 @@ import { CartItemType } from "../types/Cart";
 
 type Cart = {
   cartList: Array<CartItemType>;
-  totalPrice?: number | undefined;
-  deliveryTips?: number | undefined;
-  checkItemAmount?: number | undefined;
-  isAllChecked?: boolean | undefined;
+  totalPrice: number;
+  deliveryTips: number;
+  checkItemAmount: number;
+  isAllChecked: boolean;
 };
 
 type CartState = {
@@ -24,6 +24,7 @@ type Action =
       type: "ADD_CART";
       payload: {
         data: CartItemType;
+        count: number;
       };
     }
   | {
@@ -108,6 +109,21 @@ const getDeliveryTips = (totalPrice: number): number => {
   return deliveryTips;
 };
 
+const updateCartOrder = (
+  cartList: Array<CartItemType>,
+  id: number,
+  item: CartItemType
+): Array<CartItemType> => {
+  const itemIndex = cartList.findIndex((item) => item.id === id);
+
+  const updateArr = [
+    ...cartList.slice(0, itemIndex),
+    item,
+    ...cartList.slice(itemIndex + 1, cartList.length),
+  ];
+  return updateArr;
+};
+
 const getUpdateState = (cartList: Array<CartItemType>): CartState => {
   const totalPrice = getTotalPrice(cartList);
   const checkItemAmount = getCartCheckItem(cartList);
@@ -140,25 +156,61 @@ const reducer = (state: Cart, action: Action): Cart => {
         isAllChecked,
       };
     }
-    case "ADD_CART":
-      return state;
+    case "ADD_CART": {
+      const updateItem = action.payload.data;
+      let updateCartList = [...state.cartList, updateItem];
+
+      // cart list에 이미 있는 상품인지 검사
+      const isItemCheck = state.cartList.find(
+        (cart): CartItemType | boolean => cart.id === updateItem.id
+      );
+      if (isItemCheck) {
+        const prevData = isItemCheck;
+        const prevCount = prevData.cnt;
+        const removeData = state.cartList.filter(
+          (cart): CartItemType | boolean => cart.id !== updateItem.id
+        );
+        updateCartList = [
+          ...removeData,
+          {
+            ...updateItem,
+            cnt: action.payload.count + prevCount,
+          },
+        ];
+      }
+
+      const {
+        totalPrice,
+        checkItemAmount,
+        deliveryTips,
+        isAllChecked,
+      } = getUpdateState(updateCartList);
+      return {
+        cartList: updateCartList,
+        totalPrice,
+        deliveryTips,
+        checkItemAmount,
+        isAllChecked,
+      };
+    }
     case "UPDATE_CART": {
-      const updateCartItem = state.cartList.filter(
+      const updateCartItem: CartItemType | undefined = state.cartList.find(
         (item) => item.id === action.payload.id
       );
-      const removeCheckCartItem = state.cartList.filter(
-        (item) => item.id !== action.payload.id
-      );
+      let updateCartList: Array<CartItemType> = [];
       let cnt = 0;
-      if (action.payload.type === "plus") {
-        cnt = updateCartItem[0].cnt + 1;
-      } else {
-        cnt = updateCartItem[0].cnt < 2 ? 1 : updateCartItem[0].cnt - 1;
+      if (updateCartItem) {
+        if (action.payload.type === "plus") {
+          cnt = updateCartItem.cnt + 1;
+        } else {
+          cnt = updateCartItem.cnt < 2 ? 1 : updateCartItem.cnt - 1;
+        }
+        // 순서 보장하여 내용 업데이트
+        updateCartList = updateCartOrder(state.cartList, action.payload.id, {
+          ...updateCartItem,
+          cnt,
+        });
       }
-      const updateCartList = [
-        ...removeCheckCartItem,
-        { ...updateCartItem[0], cnt },
-      ];
 
       const {
         totalPrice,
@@ -175,35 +227,55 @@ const reducer = (state: Cart, action: Action): Cart => {
       };
     }
     case "REMOVE_CART": {
-      const removeCheckCartItem = state.cartList.filter(
+      const removeCartItem = state.cartList.filter(
         (item) => item.id !== action.payload.id
       );
-      const { totalPrice, checkItemAmount, deliveryTips } = getUpdateState(
-        removeCheckCartItem
+      const {
+        totalPrice,
+        checkItemAmount,
+        deliveryTips,
+        isAllChecked,
+      } = getUpdateState(removeCartItem);
+      return {
+        cartList: removeCartItem,
+        totalPrice,
+        deliveryTips,
+        checkItemAmount,
+        isAllChecked,
+      };
+    }
+    case "REMOVE_CHECKED_CART": {
+      const removeCheckCartItem = state.cartList.filter(
+        (item) => !item.isChecked
       );
+      const {
+        totalPrice,
+        checkItemAmount,
+        deliveryTips,
+        isAllChecked,
+      } = getUpdateState(removeCheckCartItem);
       return {
         cartList: removeCheckCartItem,
         totalPrice,
         deliveryTips,
         checkItemAmount,
+        isAllChecked,
       };
     }
     case "CHECK_CART_ITEM": {
-      const checkCartItem = state.cartList.filter(
+      const checkCartItem = state.cartList.find(
         (item) => item.id === action.payload.id
       );
-      const removeCheckCartItem = state.cartList.filter(
-        (item) => item.id !== action.payload.id
-      );
-      const updateCartList = checkCartItem[0].isChecked
-        ? [
-            ...removeCheckCartItem,
-            { ...checkCartItem[0], isChecked: !checkCartItem[0].isChecked },
-          ]
-        : [
-            { ...checkCartItem[0], isChecked: !checkCartItem[0].isChecked },
-            ...removeCheckCartItem,
-          ];
+      // 순서 보장하여 내용 업데이트
+      let updateCartList: Array<CartItemType> = [];
+
+      if (checkCartItem) {
+        updateCartList = updateCartOrder(state.cartList, action.payload.id, {
+          ...checkCartItem,
+          isChecked: !checkCartItem.isChecked,
+        });
+      }
+
       const {
         totalPrice,
         checkItemAmount,

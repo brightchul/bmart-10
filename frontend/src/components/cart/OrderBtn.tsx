@@ -1,6 +1,9 @@
 import React from "react";
 import style from "styled-components";
+import { useHistory } from "react-router-dom";
 import { COLOR } from "../../constants/style";
+import { CartContext, PopUpContext } from "../../contexts";
+import { MESSAGE } from "../../constants/message";
 
 const BtnWrapper = style.div`
   width: 100%;
@@ -40,28 +43,42 @@ const Price = style.div`
   color: ${COLOR.WHITE};
 `;
 
-type Props = {
-  orderAction: () => void;
-  totalPrice: number;
-  count: number;
-};
+const OrderBtn = (): JSX.Element => {
+  const cartData = CartContext.useCartState();
+  const { totalPrice, checkItemAmount } = cartData;
 
-const OrderBtn = (props: Props): JSX.Element => {
-  const { orderAction, totalPrice, count } = props;
+  const history = useHistory();
+  const popupDispatch = PopUpContext.usePopUpDispatch();
+
+  const goLoginPage = (): void => {
+    popupDispatch({ type: "POPUP_CLOSE" });
+    history.push("/login");
+  };
+
+  const orderAction = (): void => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // 구매하기
+    } else {
+      // 로그인 페이지로 유도
+      popupDispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: MESSAGE.LOGIN_INDUCE,
+          confirmAction: goLoginPage,
+        },
+      });
+    }
+  };
 
   return (
     <BtnWrapper>
       <Btn onClick={orderAction}>
-        <Count>{count}</Count>
+        <Count>{checkItemAmount}</Count>
         <Price>{totalPrice}원 배달 주문하기</Price>
       </Btn>
     </BtnWrapper>
   );
-};
-
-OrderBtn.defaultProps = {
-  totalPrice: 0,
-  count: 0,
 };
 
 export default OrderBtn;

@@ -2,6 +2,7 @@ import React from "react";
 import style from "styled-components";
 
 import { COLOR } from "../../constants/style";
+import { CartContext } from "../../contexts";
 
 type RowType = {
   justifyAttr?: string;
@@ -28,13 +29,10 @@ const Limit = style.div`
   color: ${COLOR.RED};
 `;
 
-type Props = {
-  totalPrice: number;
-  deliveryTips: number;
-};
+const CartTotal = (): JSX.Element => {
+  const cartData = CartContext.useCartState();
+  const { totalPrice, deliveryTips } = cartData;
 
-const CartTotal = (props: Props): JSX.Element => {
-  const { totalPrice, deliveryTips } = props;
   return (
     <TotalWrapper>
       <Row>
@@ -54,10 +52,6 @@ const CartTotal = (props: Props): JSX.Element => {
   );
 };
 
-CartTotal.defaultProps = {
-  totalPrice: 0,
-  deliveryTips: 0,
-};
 
 Row.defaultProps = {
   justifyAttr: "space-between",
