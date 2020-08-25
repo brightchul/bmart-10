@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ItemContext, ItemContextType } from "./ItemContext";
 
 type ValueType = {
-  price?: string;
+  cost?: string;
   sale?: string;
   saleValue?: number;
   discountedPrice?: number;
@@ -43,17 +43,17 @@ const getDiscountPrice = (price: string, saleValue: number): number => {
 };
 
 const getValues = ({
-  price = DEFAULT_PRICE,
+  cost = DEFAULT_PRICE,
   sale = DEFAULT_SALE,
 }: ItemContextType): ValueType => {
   const saleValue: number = getSaleValue(sale);
-  const discountedPrice = getDiscountPrice(price, saleValue);
+  const discountedPrice = getDiscountPrice(cost, saleValue);
 
-  return { price, sale, saleValue, discountedPrice };
+  return { cost, sale, saleValue, discountedPrice };
 };
 
 export default function ItemPrice(): JSX.Element {
-  const { price, sale, saleValue = 0, discountedPrice }: ValueType = getValues(
+  const { cost, sale, saleValue = 0, discountedPrice }: ValueType = getValues(
     useContext(ItemContext)
   );
 
@@ -62,7 +62,7 @@ export default function ItemPrice(): JSX.Element {
       {saleValue > 0 && (
         <div style={{ marginTop: MARGIN_TOP }}>
           <Sale>{sale}</Sale>
-          <Price>{price}원</Price>
+          <Price>{cost}원</Price>
         </div>
       )}
       <DiscountedPrice>{discountedPrice}원</DiscountedPrice>

@@ -3,10 +3,10 @@ import React from "react";
 export type ItemContextType = {
   goodId?: string | number;
   title?: string;
-  price?: string;
+  cost?: string;
   sale?: string;
   width?: string;
-  src?: string;
+  imageUrl?: string;
   fontSize?: string;
   padding?: string;
   children?: React.ReactElement;

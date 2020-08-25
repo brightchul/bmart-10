@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { ItemContext, ItemContextType } from "./ItemContext";
+import { imgURL } from "../../../utils/func";
 
 type Style = {
   width?: string;
@@ -49,11 +50,14 @@ const getHeight = (width: string): string => {
   }
 };
 
-const getStyle = ({ src, width = DEFAULT_WIDTH }: ItemContextType): Style => {
+const getStyle = ({
+  imageUrl,
+  width = DEFAULT_WIDTH,
+}: ItemContextType): Style => {
   const height = getHeight(width);
   return {
     height,
-    backgroundImage: `url(${src})`,
+    backgroundImage: `url(${imgURL(imageUrl)})`,
     backgroundSize: BACKGROUND_SIZE,
   };
 };
