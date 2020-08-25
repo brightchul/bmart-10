@@ -43,6 +43,8 @@ class CategoryDAO extends DAO {
   async getOneInfo(query: string, params: Array<string>): Promise<any> {
     const connection = await this.getConnection();
     const rows = await connection.execute<RowDataPacket[]>(query, params);
+    connection.release();
+
     let result = rows[0][0];
 
     // 그냥 반환하면 RowDataPacket[] 타입이 되기 때문에 해당 타입을 일반 배열, 객체로 변경해준다.
@@ -54,6 +56,8 @@ class CategoryDAO extends DAO {
   async getInfo(query: string, params: Array<string>): Promise<any> {
     const connection = await this.getConnection();
     const rows = await connection.execute<RowDataPacket[]>(query, params);
+    connection.release();
+
     let result = rows[0];
 
     // 그냥 반환하면 RowDataPacket[] 타입이 되기 때문에 해당 타입을 일반 배열, 객체로 변경해준다.
