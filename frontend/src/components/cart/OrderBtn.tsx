@@ -2,10 +2,6 @@ import React from "react";
 import style from "styled-components";
 import { COLOR } from "../../constants/style";
 
-type Props = {
-  orderAction: () => void;
-};
-
 const BtnWrapper = style.div`
   width: 100%;
   padding: 15px;
@@ -44,10 +40,14 @@ const Price = style.div`
   color: ${COLOR.WHITE};
 `;
 
+type Props = {
+  orderAction: () => void;
+  totalPrice: number;
+  count: number;
+};
+
 const OrderBtn = (props: Props): JSX.Element => {
-  const { orderAction } = props;
-  const count = 0;
-  const totalPrice = 0;
+  const { orderAction, totalPrice, count } = props;
 
   return (
     <BtnWrapper>
@@ -57,6 +57,11 @@ const OrderBtn = (props: Props): JSX.Element => {
       </Btn>
     </BtnWrapper>
   );
+};
+
+OrderBtn.defaultProps = {
+  totalPrice: 0,
+  count: 0,
 };
 
 export default OrderBtn;
