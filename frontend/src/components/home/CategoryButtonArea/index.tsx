@@ -3,19 +3,9 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CategoryButton from "./CategoryButton";
 import CategoryHeader from "./CategoryButtonsHeader";
+import { CATEGORY_TITLE_NAMES } from "../../../constants/message";
 
-const categoryTitleArr: Array<string> = [
-  "bread",
-  "egg",
-  "hot-dog",
-  "icecream",
-  "meal-kit",
-  "milk",
-  "salad",
-  "snacks",
-  "soap",
-  "three-lines",
-];
+const categoryTitleArr = CATEGORY_TITLE_NAMES.slice(0, 10).map((o) => o.title);
 
 const Wrapper = styled.div`
   display: flex;

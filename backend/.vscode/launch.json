@@ -5,11 +5,11 @@
       "type": "node",
       "request": "launch",
       "name": "ts-node-dev debug",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/ts-node-dev/bin/ts-node-dev",
+      "runtimeExecutable": "npm",
       "restart": true,
       "sourceMaps": true,
       "smartStep": true,
-      "args": ["--respawn", "${workspaceRoot}/src/"],
+      "args": ["run", "debug"],
       "skipFiles": ["<node_internals>/**"]
     }
   ]

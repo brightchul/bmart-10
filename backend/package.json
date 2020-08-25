@@ -4,6 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "debug": "ts-node-dev --respawn ./src",
     "start": "ts-node ./src",
     "start:dev": "nodemon"
   },
