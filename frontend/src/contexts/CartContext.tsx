@@ -115,12 +115,7 @@ const updateCartOrder = (
   item: CartItemType
 ): Array<CartItemType> => {
   const itemIndex = cartList.findIndex((item) => item.id === id);
-
-  const updateArr = [
-    ...cartList.slice(0, itemIndex),
-    item,
-    ...cartList.slice(itemIndex + 1, cartList.length),
-  ];
+  const updateArr = cartList.splice(itemIndex, 1, item);
   return updateArr;
 };
 
@@ -142,18 +137,9 @@ const getUpdateState = (cartList: Array<CartItemType>): CartState => {
 const reducer = (state: Cart, action: Action): Cart => {
   switch (action.type) {
     case "GET_CART": {
-      const {
-        totalPrice,
-        checkItemAmount,
-        deliveryTips,
-        isAllChecked,
-      } = getUpdateState(state.cartList);
       return {
         cartList: state.cartList,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
-        isAllChecked,
+        ...getUpdateState(state.cartList),
       };
     }
     case "ADD_CART": {
@@ -178,19 +164,9 @@ const reducer = (state: Cart, action: Action): Cart => {
           },
         ];
       }
-
-      const {
-        totalPrice,
-        checkItemAmount,
-        deliveryTips,
-        isAllChecked,
-      } = getUpdateState(updateCartList);
       return {
         cartList: updateCartList,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
-        isAllChecked,
+        ...getUpdateState(updateCartList),
       };
     }
     case "UPDATE_CART": {
@@ -211,55 +187,27 @@ const reducer = (state: Cart, action: Action): Cart => {
           cnt,
         });
       }
-
-      const {
-        totalPrice,
-        checkItemAmount,
-        deliveryTips,
-        isAllChecked,
-      } = getUpdateState(updateCartList);
       return {
         cartList: updateCartList,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
-        isAllChecked,
+        ...getUpdateState(updateCartList),
       };
     }
     case "REMOVE_CART": {
       const removeCartItem = state.cartList.filter(
         (item) => item.id !== action.payload.id
       );
-      const {
-        totalPrice,
-        checkItemAmount,
-        deliveryTips,
-        isAllChecked,
-      } = getUpdateState(removeCartItem);
       return {
         cartList: removeCartItem,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
-        isAllChecked,
+        ...getUpdateState(removeCartItem),
       };
     }
     case "REMOVE_CHECKED_CART": {
       const removeCheckCartItem = state.cartList.filter(
         (item) => !item.isChecked
       );
-      const {
-        totalPrice,
-        checkItemAmount,
-        deliveryTips,
-        isAllChecked,
-      } = getUpdateState(removeCheckCartItem);
       return {
         cartList: removeCheckCartItem,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
-        isAllChecked,
+        ...getUpdateState(removeCheckCartItem),
       };
     }
     case "CHECK_CART_ITEM": {
@@ -275,19 +223,9 @@ const reducer = (state: Cart, action: Action): Cart => {
           isChecked: !checkCartItem.isChecked,
         });
       }
-
-      const {
-        totalPrice,
-        checkItemAmount,
-        deliveryTips,
-        isAllChecked,
-      } = getUpdateState(updateCartList);
       return {
         cartList: updateCartList,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
-        isAllChecked,
+        ...getUpdateState(updateCartList),
       };
     }
     case "ALL_CHECK_CART_ITEM": {
@@ -295,14 +233,9 @@ const reducer = (state: Cart, action: Action): Cart => {
         ...item,
         isChecked: !state.isAllChecked,
       }));
-      const { totalPrice, checkItemAmount, deliveryTips } = getUpdateState(
-        allCheckCartItem
-      );
       return {
         cartList: allCheckCartItem,
-        totalPrice,
-        deliveryTips,
-        checkItemAmount,
+        ...getUpdateState(allCheckCartItem),
         isAllChecked: !state.isAllChecked,
       };
     }
