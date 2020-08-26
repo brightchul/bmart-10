@@ -64,7 +64,10 @@ class UserDAO extends DAO {
   }
 
   async loginUser(email: string, password: string) {
-    const result: any = this.getOneInfo(SEARCH_USER_NAME_SALT_PWD, [email]);
+    const result: RowDataPacket = await this.getOneInfo(
+      SEARCH_USER_NAME_SALT_PWD,
+      [email]
+    );
     if (!result) return false;
 
     const encryptedPassword = await getEncryptedPasswordWithSalt(
