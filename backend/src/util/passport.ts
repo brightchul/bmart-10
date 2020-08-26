@@ -16,7 +16,7 @@ export default function () {
         usernameField: "email",
         passwordField: "password",
       },
-      async function (email: string, password: string, done: any) {
+      async function (email: string, password: string, done: Function) {
         const result = await userDAO.loginUser(email, password);
         if (!result) {
           return done(null, false);
