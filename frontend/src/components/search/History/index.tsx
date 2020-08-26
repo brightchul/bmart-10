@@ -43,11 +43,8 @@ export default function SearchBar(): JSX.Element {
             {state.history.length === 0 ? (
               <NoText>검색기록이 없어요</NoText>
             ) : (
-              state.history.reverse().map((history, index) => (
-                <HistoryText
-                  key={`history.${index}`}
-                  index={state.history.length - 1 - index}
-                >
+              state.history.map((history, index) => (
+                <HistoryText key={`history.${index}`} index={index}>
                   {history}
                 </HistoryText>
               ))
