@@ -12,6 +12,8 @@ type CategoryType = {
   subCategory?: string;
 };
 
+type APIResponse = { success: boolean; data?: { no: string; name: string } };
+
 const Layer = styled.div`
   z-index: 3000;
   position: fixed;
@@ -36,15 +38,15 @@ const Title = styled.h2`
 
 const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
   const [categoryName, setCategoryName] = useState(mainCategory || "");
-  // if (subCategory) {
-  //   useEffect(() => {
-  //     fetchGet(
-  //       `/api/category/info/subcategory/${subCategory}`
-  //     ).then(({ data }: any) => setCategoryName(data.name));
-  //   }, []);
-  // }
+  useEffect(() => {
+    if (subCategory) {
+      fetchGet<APIResponse>(
+        `/api/category/info/subcategory/${subCategory}`
+      ).then((res: APIResponse) => setCategoryName(res.data?.name || ""));
+    }
+    return (): void => setCategoryName(mainCategory);
+  }, [mainCategory, subCategory]);
   const history = useHistory();
-
   return (
     <Layer>
       <Item onClick={(): void => history.goBack()}>
