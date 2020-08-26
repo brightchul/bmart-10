@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 import LazyImage from "./LazyImage";
 
@@ -35,14 +36,17 @@ const Price = styled.p`
 `;
 
 type Props = {
+  id?: number;
   title: string;
   imageURL: string;
   price: number;
 };
 
 export default function SearchBar(props: Props): JSX.Element {
+  const history = useHistory();
+
   return (
-    <Wrapper>
+    <Wrapper onClick={(): void => history.push(`/goods/${props.id}`)}>
       <LazyImage imageURL={props.imageURL} />
       <Information>
         <Title>{props.title}</Title>
