@@ -8,7 +8,7 @@ import DeleteButton from "./DeleteButton";
 
 import { useSearchDispatch } from "../../../contexts/SearchContext";
 
-import { setHistory } from "../../../utils/localstorage";
+import { setHistory, getHistory } from "../../../utils/localstorage";
 import getGoodsByName from "../../../fetch/goods/getGoodsByName";
 
 const Wrapper = styled.div`
@@ -46,6 +46,9 @@ export default function SearchBar(): JSX.Element {
     if (query) {
       search(query);
     }
+
+    const histories = getHistory();
+    dispatch({ type: "SET_HISTORY", history: histories });
   }, []);
 
   function updateFilter(event: React.KeyboardEvent<HTMLInputElement>): void {
@@ -77,6 +80,10 @@ export default function SearchBar(): JSX.Element {
     if (event.keyCode !== 13) return;
 
     setHistory(query);
+    const histories = getHistory();
+
+    dispatch({ type: "SET_HISTORY", history: histories });
+
     search(query);
   }
 
@@ -97,6 +104,10 @@ export default function SearchBar(): JSX.Element {
             if (query.length === 0) return;
 
             setHistory(query);
+
+            const histories = getHistory();
+
+            dispatch({ type: "SET_HISTORY", history: histories });
             search(query);
           }}
         />
