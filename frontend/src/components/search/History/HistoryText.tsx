@@ -19,17 +19,21 @@ const Wrapper = styled.div`
 const Text = styled.div`
   font-size: 16px;
   margin: 10px;
+
+  overflow: hidden;
+  height: 20px;
 `;
 
-const Button = styled.button`
+const RemoveButton = styled.button`
+  height: 20px;
+  width: 40px;
+
   margin: 5px;
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 16px;
   color: #444;
-
-  height: 20px;
 `;
 
 type Props = {
@@ -44,7 +48,7 @@ export default function SearchBar(props: Props): JSX.Element {
   return (
     <Wrapper>
       <Text>{props.children}</Text>
-      <Button
+      <RemoveButton
         onClick={() => {
           deleteHistoryByIndex(props.index);
 
@@ -53,7 +57,7 @@ export default function SearchBar(props: Props): JSX.Element {
         }}
       >
         삭제
-      </Button>
+      </RemoveButton>
     </Wrapper>
   );
 }
