@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 type Props = {
-  src: string;
+  src?: string;
   onClick: Function;
   index: string;
 };

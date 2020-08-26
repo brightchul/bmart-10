@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import MainItem from "../home/MainItem";
+import { ItemType } from "../../types/ItemType";
+
 const Container = styled.div`
   width: 100%;
   padding: 15px;
@@ -96,23 +98,12 @@ const sortTypeArr: Array<SortType> = [
   },
 ];
 
-type ItemType = {
-  amount: string;
-  categoryName: string;
-  cost: string;
-  createdAt: string;
-  discount: string;
-  goodId: string;
-  imageUrl: string;
-  orderCnt: string;
-  title: string;
-};
-
 export default function ItemList({
-  data,
+  data = [],
 }: {
-  data: Array<ItemType>;
+  data: Array<ItemType> | undefined;
 }): JSX.Element {
+  if (data === undefined || data.length === 0) return <div></div>;
   const [sortState, setSortState] = useState({ y: "100%", sortIdx: 0, data });
   sortState.data = data;
 

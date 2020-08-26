@@ -7,22 +7,25 @@ import Banner from "../components/common/Banner";
 import Recommend from "../components/home/Recommend";
 import MainItem from "../components/home/MainItem";
 import PullTo from "../components/home/PullTo";
-import { getAdsData, getItems } from "../mock";
+import { getAdsData } from "../mock";
 
 import { PULL_TO } from "../constants/layout";
+import { ItemType } from "../types/ItemType";
 
-type Data = {
-  title: string;
-  price: string;
-  sale: string;
-  src: string;
-  width?: string;
-};
+type Data =
+  | {
+      title: string;
+      price: string;
+      sale: string;
+      src: string;
+      width?: string;
+    }
+  | ItemType;
 
 export default function Home(): JSX.Element {
   const advertiseMockData = getAdsData();
-  const data = getItems(8);
-  const itemData = getItems(30);
+  const data = [] as Array<ItemType>;
+  const itemData = [] as Array<ItemType>;
 
   let isScroll = true;
   let scrollStart = 0;
@@ -77,7 +80,7 @@ export default function Home(): JSX.Element {
         <Banner advertiseData={advertiseMockData}></Banner>
         <Category></Category>
         <HorizontalSlider title={"고객님을 위해 준비한 상품"}>
-          {data.map((item: Data, idx: number) => (
+          {data.map((item: ItemType, idx: number) => (
             <MainItem key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
