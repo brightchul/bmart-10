@@ -28,7 +28,6 @@ export default function SearchBar(): JSX.Element {
   const dispatch = useSearchDispatch();
 
   function search(query: string): void {
-    setHistory(query);
     history.pushState({}, "", `?query=${query}`);
 
     dispatch({ type: "SET_SHOW_HISTORY", showHistory: false });
@@ -77,6 +76,7 @@ export default function SearchBar(): JSX.Element {
   function searchByEnter(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.keyCode !== 13) return;
 
+    setHistory(query);
     search(query);
   }
 
@@ -95,6 +95,8 @@ export default function SearchBar(): JSX.Element {
         <SearchIcon
           onClick={(): void => {
             if (query.length === 0) return;
+
+            setHistory(query);
             search(query);
           }}
         />
