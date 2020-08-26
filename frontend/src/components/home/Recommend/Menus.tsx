@@ -96,7 +96,7 @@ export default function Menus(props: Props): JSX.Element {
         collectStatistics={false}
         autoResize={true}
       >
-        {props.menus.reverse().map((menu, index) => (
+        {props.menus.map((menu, index) => (
           <Menu
             key={`menu.${index}`}
             menu={menu}

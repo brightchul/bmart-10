@@ -5,6 +5,9 @@ type Props = {
 };
 
 export default styled.button<Props>`
+  position: absolute;
+  right: 20px;
+
   width: ${(props): number => props.size || 30}px;
   height: ${(props): number => props.size || 30}px;
   background-image: url("https://static.toss.im/icons/png/4x/icn-searchfield.png");
