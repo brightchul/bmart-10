@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+import mysql, { RowDataPacket } from "mysql2/promise";
 import DAO from "./data-access-object";
 import poolOption from "./pool-option";
 
@@ -145,6 +145,13 @@ class GoodsDAO extends DAO {
     }
 
     connection.release();
+    return result;
+  }
+  async getGoodsInfo(goodId: string) {
+    const result = (await this.execute(
+      SELECT_GOODS,
+      goodId
+    )) as RowDataPacket[];
     return result;
   }
 }
