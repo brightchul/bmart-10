@@ -2,11 +2,13 @@ export type CartItem = {
   email: string;
   id: string;
   amount: number;
+  checked: string;
 };
 
 export type UserCartList = {
   id: string;
   amount: number;
+  checked: string;
 };
 
 export type CartListItem = {
@@ -16,4 +18,5 @@ export type CartListItem = {
   discount: number;
   amount: number;
   image_url: string;
+  checked: string;
 };
