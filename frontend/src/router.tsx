@@ -71,6 +71,7 @@ const Router = (): JSX.Element => {
           path={`${ROUTES.CATEGORY.path}/:mainCategory`}
           component={Category}
         />
+        <Route exact path={`${ROUTES.SEARCH.path}/:query`} component={Search} />
         <Route exact path={ROUTES.REGISTER.path} component={Register} />
         {Routes.map((item: route) => (
           <Route

@@ -5,11 +5,13 @@ import { Good } from "../types/Good";
 type State = {
   searchResult: Good[];
   showHistory: boolean;
+  history: string[];
 };
 
 type Action =
   | { type: "SET_GOODS"; goods: Good[] }
-  | { type: "SET_SHOW_HISTORY"; showHistory: boolean };
+  | { type: "SET_SHOW_HISTORY"; showHistory: boolean }
+  | { type: "SET_HISTORY"; history: string[] };
 
 type SampleDispatch = Dispatch<Action>;
 
@@ -28,6 +30,11 @@ function reducer(state: State, action: Action): State {
         ...state,
         showHistory: action.showHistory,
       };
+    case "SET_HISTORY":
+      return {
+        ...state,
+        history: action.history,
+      };
     default:
       throw new Error("Unhandled action");
   }
@@ -41,6 +48,7 @@ export function SearchProvider({
   const [state, dispatch] = useReducer(reducer, {
     showHistory: false,
     searchResult: [],
+    history: [],
   });
 
   return (

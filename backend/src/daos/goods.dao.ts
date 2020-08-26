@@ -60,12 +60,12 @@ class GoodsDAO extends DAO {
     const connection = await this.getConnection();
     const result: Goods[] = [];
 
-    const rows = await this.executeQuery(connection, SEARCH_QUERY, [
+    const rows = (await this.executeQuery(connection, SEARCH_QUERY, [
       `%${query}%`,
-    ]);
+    ])) as mysql.RowDataPacket[];
 
     if (rows instanceof Array) {
-      rows.forEach((row: any) => {
+      rows.forEach((row: mysql.RowDataPacket) => {
         const inner = row as Row;
 
         const curData: Goods = {
@@ -81,6 +81,8 @@ class GoodsDAO extends DAO {
         result.push(curData);
       });
     }
+
+    connection.release();
 
     return result;
   }

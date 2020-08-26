@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import FixedBox from "./FixedBox";
 import Input from "./Input";
-import SearchIcon from "./SeachIcon";
+import SearchIcon from "./SearchIcon";
 import DeleteButton from "./DeleteButton";
 
 import { useSearchDispatch } from "../../../contexts/SearchContext";
 
-import { setHistory } from "../../../utils/localstorage";
+import { setHistory, getHistory } from "../../../utils/localstorage";
 import getGoodsByName from "../../../fetch/goods/getGoodsByName";
 
 const Wrapper = styled.div`
@@ -28,7 +28,8 @@ export default function SearchBar(): JSX.Element {
   const dispatch = useSearchDispatch();
 
   function search(query: string): void {
-    setHistory(query);
+    history.pushState({}, "", `?query=${query}`);
+
     dispatch({ type: "SET_SHOW_HISTORY", showHistory: false });
 
     getGoodsByName(query).then((res) => {
@@ -37,6 +38,18 @@ export default function SearchBar(): JSX.Element {
       }
     });
   }
+
+  useEffect(() => {
+    const parsedUrl = new URL(window.location.href);
+    const query = parsedUrl.searchParams.get("query");
+
+    if (query) {
+      search(query);
+    }
+
+    const histories = getHistory();
+    dispatch({ type: "SET_HISTORY", history: histories });
+  }, []);
 
   function updateFilter(event: React.KeyboardEvent<HTMLInputElement>): void {
     const filter = (event.target as HTMLInputElement).value;
@@ -66,6 +79,11 @@ export default function SearchBar(): JSX.Element {
   function searchByEnter(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.keyCode !== 13) return;
 
+    setHistory(query);
+    const histories = getHistory();
+
+    dispatch({ type: "SET_HISTORY", history: histories });
+
     search(query);
   }
 
@@ -84,6 +102,12 @@ export default function SearchBar(): JSX.Element {
         <SearchIcon
           onClick={(): void => {
             if (query.length === 0) return;
+
+            setHistory(query);
+
+            const histories = getHistory();
+
+            dispatch({ type: "SET_HISTORY", history: histories });
             search(query);
           }}
         />
