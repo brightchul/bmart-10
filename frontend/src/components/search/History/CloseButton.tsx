@@ -18,7 +18,7 @@ export default styled.button`
   &:before,
   &:after {
     width: ${SIZE}px;
-    height: 5px;
+    height: 2px;
     transform: rotate(-45deg);
     content: "";
     position: absolute;
