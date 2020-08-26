@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import FixedBox from "./FixedBox";
 import Input from "./Input";
-import SearchIcon from "./SeachIcon";
+import SearchIcon from "./SearchIcon";
 import DeleteButton from "./DeleteButton";
 
 import { useSearchDispatch } from "../../../contexts/SearchContext";
