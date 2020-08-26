@@ -41,13 +41,23 @@ type Props = {
   children?: string;
 };
 
+function trimText(text: string | undefined): string {
+  if (!text) {
+    return "";
+  }
+  if (text.length > 14) {
+    return text.substring(0, 13) + "...";
+  }
+  return text;
+}
+
 export default function SearchBar(props: Props): JSX.Element {
   const state = useSearchState();
   const dispatch = useSearchDispatch();
 
   return (
     <Wrapper>
-      <Text>{props.children}</Text>
+      <Text>{trimText(props.children)}</Text>
       <RemoveButton
         onClick={() => {
           deleteHistoryByIndex(props.index);
