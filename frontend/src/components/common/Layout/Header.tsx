@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { COLOR, SVG } from "../../../constants/style";
 import { HEADER } from "../../../constants/layout";
 // import Logo from '/asset/';
-import { KEY_NAME } from "../../../constants/message";
 import { useHistory } from "react-router-dom";
+import { fetchGet } from "../../../fetch";
 
 type CategoryType = {
   mainCategory: string;
@@ -34,17 +34,15 @@ const Title = styled.h2`
   color: #fff;
 `;
 
-const getCategoryName = (
-  mainCategory: string,
-  subCategory: string | undefined
-): string => {
-  if (subCategory) return KEY_NAME[mainCategory].subCategory[subCategory].name;
-  return KEY_NAME[mainCategory]?.name;
-};
-
 const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
-  // const categoryName = getCategoryName(mainCategory, subCategory);
-  const categoryName = "";
+  const [categoryName, setCategoryName] = useState(mainCategory || "");
+  // if (subCategory) {
+  //   useEffect(() => {
+  //     fetchGet(
+  //       `/api/category/info/subcategory/${subCategory}`
+  //     ).then(({ data }: any) => setCategoryName(data.name));
+  //   }, []);
+  // }
   const history = useHistory();
 
   return (

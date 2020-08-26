@@ -3,6 +3,7 @@ import DAO from "./data-access-object";
 import poolOption from "./pool-option";
 import { Query } from "../util/query";
 
+const SEARCH_SUB_CATEGORY_INFO_NO = `SELECT no, name FROM sub_category WHERE no = ? `;
 const SEARCH_SUB_CATEGORY_INFO = `SELECT no, name FROM sub_category WHERE name = ? `;
 const SEARCH_SUB_CATEGORY_NAME_LIST = `SELECT name, sub_category_array as data FROM main_category WHERE name = ? `;
 const SEARCH_SUB_CATEGORY_NAME = `SELECT name FROM sub_category where no=?`;
@@ -82,6 +83,13 @@ class CategoryDAO extends DAO {
     const result: SubCategoryInfo = await this.getOneInfo<SubCategoryInfo>(
       SEARCH_SUB_CATEGORY_INFO,
       [name]
+    );
+    return result;
+  }
+  async getSubCategoryInfoByNo(no: string): Promise<SubCategoryInfo> {
+    const result: SubCategoryInfo = await this.getOneInfo<SubCategoryInfo>(
+      SEARCH_SUB_CATEGORY_INFO_NO,
+      [no]
     );
     return result;
   }
