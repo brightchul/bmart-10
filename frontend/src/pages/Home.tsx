@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, HorizontalSlider } from "../components/common";
 import Category from "../components/home/CategoryButtonArea";
 import MainItemContainer from "../components/home/MainItemContainer";
@@ -11,6 +11,9 @@ import { getAdsData } from "../mock";
 
 import { PULL_TO } from "../constants/layout";
 import { ItemType } from "../types/ItemType";
+import { getCategoryGoods } from "../fetch/category";
+
+type ArrCategoryGoods = Array<ItemType> | undefined;
 
 type Data =
   | {
@@ -24,8 +27,6 @@ type Data =
 
 export default function Home(): JSX.Element {
   const advertiseMockData = getAdsData();
-  const data = [] as Array<ItemType>;
-  const itemData = [] as Array<ItemType>;
 
   let isScroll = true;
   let scrollStart = 0;
@@ -69,6 +70,19 @@ export default function Home(): JSX.Element {
     observable.trigger(Math.min(screenY - scrollStart, PULL_TO.SIZE));
   }
 
+  const [[foodList, livingList], setList] = useState([
+    [] as ArrCategoryGoods,
+    [] as ArrCategoryGoods,
+  ]);
+  useEffect((): void => {
+    Promise.all([
+      getCategoryGoods({ mainCategoryName: "국·반찬·메인요리" }),
+      getCategoryGoods({ mainCategoryName: "생활용품·리빙" }),
+    ]).then(([newFoodList, newLivingList]): void => {
+      setList([newFoodList, newLivingList]);
+    });
+  }, []);
+
   return (
     <Layout>
       <div
@@ -80,25 +94,25 @@ export default function Home(): JSX.Element {
         <Banner advertiseData={advertiseMockData}></Banner>
         <Category></Category>
         <HorizontalSlider title={"고객님을 위해 준비한 상품"}>
-          {data.map((item: ItemType, idx: number) => (
-            <MainItem key={idx + ""} {...item} />
-          ))}
+          {(livingList?.slice(5, 20) || []).map(
+            (item: ItemType, idx: number) => (
+              <MainItem key={idx + ""} {...item} />
+            )
+          )}
         </HorizontalSlider>
-        <MainItemGallery data={data.slice(0, 4)} />
-        <MainItemContainer data={itemData.slice(0, 30)}>
-          지금 뭐 먹지?
-        </MainItemContainer>
+        <MainItemGallery data={(foodList || []).slice(0, 4)} />
+        <MainItemContainer data={foodList}>지금 뭐 먹지?</MainItemContainer>
         <HorizontalSlider title={"새로 나왔어요"} isMore>
-          {data.map((item: Data, idx: number) => (
+          {(livingList?.slice(5, 20) || []).map((item: Data, idx: number) => (
             <MainItem key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
         <HorizontalSlider title={"요즘 잘 팔려요"} isMore>
-          {data.map((item: Data, idx: number) => (
+          {(livingList?.slice(5, 20) || []).map((item: Data, idx: number) => (
             <MainItem key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
-        <MainItemContainer data={itemData}>
+        <MainItemContainer data={livingList}>
           지금 필요한 생필품!!
         </MainItemContainer>
         <Recommend />
