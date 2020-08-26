@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import {
@@ -15,7 +15,7 @@ import {
   ItemImg,
   ItemContent,
 } from "./StyleComponent";
-import { getItem, ItemType } from "../../mock";
+
 import MainItem from "../home/MainItem";
 import DeliveryInfo from "./DeliveryInfo";
 import ReturnExchangeInfo from "./ReturnExchangeInfo";
@@ -24,20 +24,45 @@ import Counter from "./Counter";
 import { CartItemType } from "../../types/Cart";
 import { PopUpContext, CartContext } from "../../contexts";
 import { MESSAGE } from "../../constants/message";
+import getGoodsById from "../../fetch/goods/getGoodsByGoodId";
+import { ItemType } from "../../types/ItemType";
 
 const Container = styled.div`
   margin-top: -15px;
 `;
 
-const getPrice = (item: ItemType | undefined): number => {
+type APIResponse = {
+  success: boolean;
+  data?: ItemType;
+};
+
+const getCost = (item: ItemType): number => {
   return (
-    (parseInt(item?.price || "0") * (1 - parseInt(item?.sale || "0") / 100)) | 0
+    (parseInt(item?.cost || "0") *
+      (1 - parseInt(item?.discount || "0") / 100)) |
+    0
   );
 };
 
 export default function Goods({ goodId }: { goodId: string }): JSX.Element {
-  const item = getItem(parseInt(goodId));
-  const price = getPrice(item);
+  const [item, setItem] = useState({
+    goodId,
+    title: "",
+    categoryName: "",
+    createdAt: "",
+    cost: "0",
+    discount: "",
+    amount: "",
+    imageUrl: "",
+  });
+  useEffect(() => {
+    getGoodsById(goodId).then((result: APIResponse) => {
+      if (result.data === undefined) return;
+      setItem(result.data);
+    });
+  }, []);
+
+  const cost = getCost(item);
 
   const [yPercent, setYPercent] = useState({ y: "100%" });
   const [count, setCount] = useState(1);
@@ -47,14 +72,16 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
 
   const cartDispatch = CartContext.useCartDispatch();
 
-  const makeCartItem = (item: ItemType): CartItemType => {
-    const goodId = item.goodId || 0;
+  const makeCartItem = (item?: ItemType): CartItemType => {
+    if (item === undefined) return {} as CartItemType;
+
+    const goodId = item.goodId || "0";
     const updateItem: CartItemType = {
-      id: goodId,
+      id: parseInt(goodId),
       name: item.title,
-      cost: parseInt(item.price),
-      discount: parseInt(item.sale) || 0,
-      imageUrl: item.src,
+      cost: parseInt(item.cost || "0"),
+      discount: parseInt(item.discount || "0"),
+      imageUrl: item.imageUrl,
       isChecked: true,
       cnt: count,
     };
@@ -113,20 +140,22 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
         </HideAreaHeader>
         <HideAreaContent>
           <ItemContent>
-            <ItemImg style={{ backgroundImage: `url(${item?.src})` }}></ItemImg>
+            <ItemImg
+              style={{ backgroundImage: `url(${item?.imageUrl})` }}
+            ></ItemImg>
 
             <ItemInfo>
               <ul>
                 <li>{item?.title}</li>
                 <li>1회 최대 구매수량 10개</li>
-                <li>{price}원</li>
+                <li>{cost}원</li>
               </ul>
             </ItemInfo>
             <Counter setCount={setCount} count={count}></Counter>
           </ItemContent>
           <BagButton onClick={addCart}>
             <span>{count}개 담기 </span>
-            <RightSpan>{count * price}원</RightSpan>
+            <RightSpan>{count * cost}원</RightSpan>
           </BagButton>
         </HideAreaContent>
       </HideArea>
