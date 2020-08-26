@@ -50,7 +50,8 @@ router.post("/register", async (request: Request, response: Response) => {
  * @apiName UserLogin
  * @apiGroup User
  *
- * @apiParam {String} email password
+ * @apiParam {String} email
+ * @apiParam {String} password
  *
  * @apiSuccess {Boolean} success API 성공 여부
  * @apiSuccess {Object} data name token 포함된 객체
@@ -122,7 +123,6 @@ router.post(
  */
 router.get("/email/:email", async (request: Request, response: Response) => {
   const email = request.params.email.trim();
-
   const apiResponse: APIResponse = {
     success: false,
   };
