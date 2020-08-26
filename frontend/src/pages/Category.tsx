@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Layout, HorizontalSlider } from "../components/common";
 import MainItem from "../components/home/MainItem";
 import CategoryMenu from "../components/common/CategoryMenu";
 import Banner from "../components/common/Banner";
 import { getAdsData, getItems } from "../mock";
-import { KEY_NAME } from "../constants/message";
 import ItemList from "../components/common/ItemList";
+import { getSubCategoryList, getCategoryGoods } from "../fetch/category";
 
 type Data = {
   title: string;
@@ -23,13 +23,25 @@ type CategoryType = {
 
 const Category = ({
   match: {
-    params: { mainCategory = "", subCategory },
+    params: { mainCategory = "", subCategory = "" },
   },
 }: RouteComponentProps<CategoryType>): JSX.Element => {
-  const subCategoryData = Object.keys(KEY_NAME[mainCategory].subCategory).map(
-    (o) => o
-  );
-  const data = getItems(6);
+  const [[subCategoryDataList, goodsDataList], setDataArr] = useState([[], []]);
+
+  useEffect(() => {
+    Promise.all([
+      getSubCategoryList(mainCategory),
+      getCategoryGoods({
+        mainCategoryName: mainCategory,
+        subCategoryNo: subCategory,
+      }),
+    ]).then(([newSubCategoryDataList, newGoodsDataList]) => {
+      setDataArr([newSubCategoryDataList.data, newGoodsDataList.data]);
+    });
+    return () => setDataArr([subCategoryDataList, []]);
+  }, [mainCategory, subCategory]);
+
+  const data = goodsDataList.slice(0, 6);
   return (
     <Layout mainCategory={mainCategory} subCategory={subCategory}>
       {!subCategory && <Banner advertiseData={getAdsData()}></Banner>}
@@ -37,7 +49,7 @@ const Category = ({
         <CategoryMenu
           baseUrl={`/category${"/" + mainCategory}`}
           mainCategoryName={mainCategory}
-          categoryData={subCategoryData}
+          categoryData={subCategoryDataList}
         ></CategoryMenu>
       )}
       {!subCategory && (
@@ -53,7 +65,7 @@ const Category = ({
           })}
         </HorizontalSlider>
       )}
-      <ItemList data={getItems(40)}></ItemList>
+      <ItemList data={goodsDataList}></ItemList>
     </Layout>
   );
 };

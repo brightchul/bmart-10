@@ -23,7 +23,7 @@
 
 B마트보다 조금 더 나은 마트! B+ 마트 입니다.
 
-## [B+마트로 이동하기 🚴🏻‍♀️🚴🏻🚴🏻‍♂️](http://3.35.51.138/)
+## [B+마트로 이동하기 🚴🏻‍♀️🚴🏻🚴🏻‍♂️](http://15.164.218.119/)
 
 ## 📌 프로젝트 소개
 
@@ -108,17 +108,22 @@ yarn start:dev # 개발용 서버 실행
 └── src
     ├── components  # 컴포넌트
     ├── constants   # 사용하는 상수
+    ├── contexts    # 전역상태관리와 custom hooks
+    ├── fetch       # API 통신을 위한 함수
     ├── pages       # 페이지 컴포넌트 (routing을 위한)
-    └── stylesheets # 공용 스타일 속성
+    ├── stylesheets # 공용 스타일 속성
+    ├── types       # 타입 정의
+    └── utils       # 유틸성 함수들
 ```
 
 #### backend
 
 ```bash
 └── src
+    ├── apis        # API 라우터
     ├── constants   # 사용하는 상수
     ├── daos        # Data Access Object
-    ├── routes      # 라우터
+    ├── routes      # 라우팅
     ├── types       # 타입 정의
     └── util        # 유틸성 함수들
 ```
@@ -132,6 +137,7 @@ yarn start:dev # 개발용 서버 실행
 ```sh
 # API Server
 REACT_APP_API_HOST=
+REACT_APP_API_PORT=
 ```
 
 ### backend 설정 파일 .env
@@ -143,7 +149,6 @@ NODE_ENV=
 PORT=
 HOST=
 
-# Passport
 JWT_SECRET=
 
 # Database Server
@@ -152,13 +157,6 @@ DB_PORT=
 DB_USER=
 DB_PASSWORD=
 DB_NAME=
-
-# Test Database Server
-TEST_DB_HOST=
-TEST_DB_PORT=
-TEST_DB_USER=
-TEST_DB_PASSWORD=
-TEST_DB_NAME=
 ```
 
 ## 🥴 Support

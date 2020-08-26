@@ -68,7 +68,7 @@ export const CATEGORY_TITLE_NAMES: Array<CategoryTitleName> = [
   { name: "면·양념·오일", title: "noodle" },
   { name: "반려동물", title: "animal" },
   { name: "베이비·키즈", title: "baby" },
-  { name: "베이커리·치즈", title: "bakery" },
+  { name: "베이커리·치즈·델리", title: "bakery" },
   { name: "뷰티·바디케어", title: "beauty" },
   { name: "샐러드·간편식", title: "salad" },
   { name: "수산·해산·건어물", title: "seafood" },
