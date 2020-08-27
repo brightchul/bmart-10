@@ -78,7 +78,7 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
     const goodId = item.goodId || "0";
     const updateItem: CartItemType = {
       id: parseInt(goodId),
-      name: item.title,
+      title: item.title,
       cost: parseInt(item.cost || "0"),
       discount: parseInt(item.discount || "0"),
       imageUrl: item.imageUrl,
