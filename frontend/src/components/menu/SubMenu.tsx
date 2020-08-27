@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
@@ -50,7 +50,13 @@ const List = styled.li`
   background-color: ${ACTIVE_BACKGROUND};
 `;
 
+type Observable = {
+  callbacks: Function[];
+  trigger: () => void;
+};
+
 type Props = {
+  observable: Observable;
   leftSide: {
     title: string;
     subCategories: string[];
@@ -67,11 +73,16 @@ export default function SubMenu(props: Props): JSX.Element {
   const [open, setOpen] = useState<Open>("none");
   const history = useHistory();
 
+  useEffect(() => {
+    props.observable.callbacks.push(setOpen);
+  }, []);
+
   return (
     <Wrapper>
       <TitleWrapper>
         <Title
           onClick={(): void => {
+            props.observable.trigger();
             setOpen(open === "left" ? "none" : "left");
           }}
           className={open === "left" ? "active" : undefined}
@@ -81,6 +92,7 @@ export default function SubMenu(props: Props): JSX.Element {
         {props.rightSide ? (
           <Title
             onClick={(): void => {
+              props.observable.trigger();
               setOpen(open === "right" ? "none" : "right");
             }}
             className={open === "right" ? "active" : undefined}

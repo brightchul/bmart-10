@@ -60,6 +60,15 @@ function groupByTwo(list: Category[]): GroupCategory[] {
 }
 
 export default function Menu(): JSX.Element {
+  const observerCloseAll = {
+    callbacks: new Array<Function>(),
+    trigger: function () {
+      this.callbacks.forEach((callback) => {
+        callback(false);
+      });
+    },
+  };
+
   return (
     <Wrapper>
       <Section>
@@ -67,6 +76,7 @@ export default function Menu(): JSX.Element {
         <SubCategory>
           {groupByTwo(dummyData.food).map((cur, index) => (
             <SubMenu
+              observable={observerCloseAll}
               key={`foods/${index}`}
               leftSide={cur.leftSide}
               rightSide={cur.rightSide}
@@ -80,6 +90,7 @@ export default function Menu(): JSX.Element {
         <SubCategory>
           {groupByTwo(dummyData.chore).map((cur, index) => (
             <SubMenu
+              observable={observerCloseAll}
               key={`chore/${index}`}
               leftSide={cur.leftSide}
               rightSide={cur.rightSide}
