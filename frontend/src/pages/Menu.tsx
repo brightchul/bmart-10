@@ -1,8 +1,14 @@
-import React from 'react';
-import { Layout } from '../components/common';
+import React from "react";
+import { Layout } from "../components/common";
 
-const Menu = (): JSX.Element => {
-    return <Layout>메뉴 페이지</Layout>;
+import Menu from "../components/menu";
+
+const MenuPage = (): JSX.Element => {
+  return (
+    <Layout>
+      <Menu />
+    </Layout>
+  );
 };
 
-export default Menu;
+export default MenuPage;
