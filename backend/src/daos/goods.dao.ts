@@ -195,6 +195,19 @@ class GoodsDAO extends DAO {
     );
     return result;
   }
+  async getPopularGoods({
+    startIdx,
+    offset,
+  }: {
+    startIdx?: number;
+    offset?: number;
+  }) {
+    const result = await this.getInfo(
+      Query.of(SELECT_POPULAR_GOODS).limit(startIdx, offset).build(),
+      []
+    );
+    return result;
+  }
 }
 
 export default new GoodsDAO(poolOption);
