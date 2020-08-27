@@ -59,6 +59,10 @@ export const MESSAGE = {
   LOGIN_INDUCE: "로그인 후 주문이 가능합니다. \n 로그인 후 주문하시겠습니까?",
   ADD_CART:
     "장바구니에 상품을 담았습니다. \n 장바구니 페이지로 이동하시겠습니까?",
+  USER_LOGIN_ERROR: "로그인에 실패하였습니다. \n 다시 시도해주세요.",
+  USER_EMAIL_EMPTY: "이메일을 입력해주세요.",
+  USER_PASSWORD_EMPTY: "비밀번호를 입력해주세요.",
+  USER_EMAIL_EXIST: "입력하신 이메일은 존재하는 이메일입니다. \n 다른 이메일을 입력해 주세요.",
 };
 
 type CategoryTitleName = { name: string; title: string };
