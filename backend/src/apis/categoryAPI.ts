@@ -18,7 +18,7 @@ const parseRequestQueryToInt = (value?: string): number | undefined => {
 };
 
 /**
- * @api {get} /api/category/list/:mainCategoryName 상품 이름으로 검색
+ * @api {get} /api/category/list/:mainCategoryName 메인 카테고리 이름으로 서브카테고리 정보를 가져온다.
  * @apiName CategoryList by mainCategoryName
  * @apiGroup Category
  *
@@ -66,6 +66,53 @@ router.get(
 
     apiResponse.success = true;
     apiResponse.data = [...subCategoryInfoArr];
+    response.status(200).send(apiResponse);
+  }
+);
+
+/**
+ * @api {get} /api/category/info/subcategory/:subCategoryNo 메인 카테고리 이름으로 서브카테고리 정보를 가져온다.
+ * @apiName subCategoryInfo by subCategoryNo
+ * @apiGroup Category
+ *
+ * @apiParam {String} subCategoryNo
+ *
+ * @apiSuccess {Boolean} success API 성공 여부
+ * @apiSuccess {Object} data 서브카테고리 정보들
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "data" : {"name": string, "no": number}
+ *     }
+ *
+ * @apiError NotFound
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "success": false,
+ *     }
+ */
+router.get(
+  "/info/subcategory/:subCategoryNo",
+  async (request: Request, response: Response) => {
+    const { subCategoryNo } = request.params;
+    const apiResponse: APIResponse = {
+      success: false,
+    };
+
+    if (!subCategoryNo) {
+      return response.status(404).send(apiResponse);
+    }
+
+    const subCategoryInfo = await categoryDAO.getSubCategoryInfoByNo(
+      subCategoryNo
+    );
+
+    apiResponse.success = true;
+    apiResponse.data = subCategoryInfo;
     response.status(200).send(apiResponse);
   }
 );

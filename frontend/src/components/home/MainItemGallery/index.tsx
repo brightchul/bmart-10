@@ -3,16 +3,10 @@ import styled from "styled-components";
 import GalleryHeader from "./GalleryHeader";
 import GalleryImage from "./GalleryImage";
 import MainItem from "../MainItem";
+import { ItemType } from "../../../types/ItemType";
 
-type Data = {
-  goodId?: string | number;
-  title: string;
-  price: string;
-  sale: string;
-  src: string;
-};
 type Props = {
-  data: Array<Data>;
+  data: Array<ItemType>;
 };
 
 const GalleryWrapper = styled.div`
@@ -29,18 +23,18 @@ const MAIN_ITEM_WIDTH = "100%";
 
 export default function MainItemGallery({ data: dataArr }: Props): JSX.Element {
   const [index, setIndex] = useState(0);
-  const dataOne: Data = dataArr[index];
+  const dataOne: ItemType = dataArr[index];
 
   const setIdx = (idx: number): void => setIndex(idx);
   const convertDataToGalleryImage = (
-    { src }: { src: string },
+    { imageUrl }: { imageUrl?: string },
     idx: number
   ): JSX.Element => (
     <GalleryImage
       key={idx + ""}
       index={idx + ""}
       onClick={setIdx}
-      src={src}
+      src={imageUrl}
     ></GalleryImage>
   );
 

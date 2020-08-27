@@ -1,15 +1,11 @@
 import { API_HOST } from "../constants/API";
 
-export type APIResponse =
-  | {
-      success: false;
-    }
-  | {
-      success: true;
-      data: Array<{ [key: string]: any }>;
-    };
+export type APIResponse = {
+  success: boolean;
+  data?: Array<{ [key: string]: string }>;
+};
 
-export async function get(url: string) {
+export async function fetchGet<T>(url: string): Promise<T> {
   return await fetch(`${API_HOST}${url}`, {
     mode: "cors",
     method: "GET",
@@ -19,7 +15,10 @@ export async function get(url: string) {
   });
 }
 
-export async function post(url: string, data: { [key: string]: any }) {
+export async function fetchPost<T>(
+  url: string,
+  data: { [key: string]: string }
+): Promise<T> {
   return await fetch(`${API_HOST}${url}`, {
     mode: "cors",
     method: "POST",

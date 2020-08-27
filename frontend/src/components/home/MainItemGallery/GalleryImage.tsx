@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { imgURL } from "../../../utils/func";
 
 type Props = {
-  src: string;
+  src?: string;
   onClick: Function;
   index: string;
 };
@@ -21,7 +22,7 @@ export default function GalleryImage({
   onClick,
   index,
 }: Props): JSX.Element {
-  const style = { backgroundImage: `url("${src}")` };
+  const style = { backgroundImage: `url("${imgURL(src)}")` };
 
   return (
     <ImgDiv

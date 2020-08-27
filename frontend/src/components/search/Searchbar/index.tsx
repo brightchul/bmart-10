@@ -6,7 +6,10 @@ import Input from "./Input";
 import SearchIcon from "./SearchIcon";
 import DeleteButton from "./DeleteButton";
 
-import { useSearchDispatch } from "../../../contexts/SearchContext";
+import {
+  useSearchDispatch,
+  useSearchState,
+} from "../../../contexts/SearchContext";
 
 import { setHistory, getHistory } from "../../../utils/localstorage";
 import getGoodsByName from "../../../fetch/goods/getGoodsByName";
@@ -22,14 +25,12 @@ const Wrapper = styled.div`
 `;
 
 export default function SearchBar(): JSX.Element {
-  const [showDelete, setShowDelete] = useState(false);
   const [query, setQuery] = useState("");
 
   const dispatch = useSearchDispatch();
+  const state = useSearchState();
 
   function search(query: string): void {
-    history.pushState({}, "", `?query=${query}`);
-
     dispatch({ type: "SET_SHOW_HISTORY", showHistory: false });
 
     getGoodsByName(query).then((res) => {
@@ -52,28 +53,25 @@ export default function SearchBar(): JSX.Element {
   }, []);
 
   function updateFilter(event: React.KeyboardEvent<HTMLInputElement>): void {
-    const filter = (event.target as HTMLInputElement).value;
+    const filter = state.input.value;
+
     setQuery(filter);
     if (filter.length > 0) {
-      setShowDelete(true);
+      dispatch({ type: "SHOW_DELETE_BUTTON", value: true });
     } else {
-      setShowDelete(false);
+      dispatch({ type: "SHOW_DELETE_BUTTON", value: false });
     }
   }
 
-  function deleteFilter(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void {
-    const input = (event.target as HTMLInputElement).parentNode?.querySelector(
-      "input"
-    );
+  function deleteFilter(): void {
+    const input = state.input;
 
     if (input) {
       input.value = "";
     }
 
     setQuery("");
-    setShowDelete(false);
+    dispatch({ type: "SHOW_DELETE_BUTTON", value: false });
   }
 
   function searchByEnter(event: React.KeyboardEvent<HTMLInputElement>): void {
@@ -97,8 +95,15 @@ export default function SearchBar(): JSX.Element {
           onClick={(): void => {
             dispatch({ type: "SET_SHOW_HISTORY", showHistory: true });
           }}
+          ref={(input: HTMLInputElement | null): void => {
+            if (state.input === input) return;
+
+            if (input) {
+              dispatch({ type: "SET_INPUT", input: input });
+            }
+          }}
         />
-        <DeleteButton onClick={deleteFilter} show={showDelete} />
+        <DeleteButton onClick={deleteFilter} show={state.showDelete} />
         <SearchIcon
           onClick={(): void => {
             if (query.length === 0) return;

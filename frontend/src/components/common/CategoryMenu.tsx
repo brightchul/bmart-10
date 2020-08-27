@@ -24,10 +24,15 @@ const categoryGo = (history: History, baseUrl: string, no: number): void => {
   history.push(`${baseUrl}/${no}`);
 };
 
-type SubCategoryInfo = { no: number; name: string };
+type SubCategoryInfo = {
+  no: string;
+  name: string;
+};
+
+type ArrSubCategoryInfo = Array<SubCategoryInfo> | undefined;
 
 function makeRow(
-  oneRowInfo: Array<SubCategoryInfo>,
+  oneRowInfo: ArrSubCategoryInfo,
   baseUrl: string,
   mainCategoryName: string,
   idx: number
@@ -37,10 +42,10 @@ function makeRow(
   return (
     <RowContainer key={idx + ""}>
       <Row key={idx + ""}>
-        {oneRowInfo.map((one: SubCategoryInfo, idx: number) => (
+        {(oneRowInfo || []).map((one: SubCategoryInfo, idx: number) => (
           <Menu
             key={idx + ""}
-            onClick={(): void => categoryGo(history, baseUrl, one.no)}
+            onClick={(): void => categoryGo(history, baseUrl, parseInt(one.no))}
           >
             {one && one.name}
           </Menu>
@@ -67,19 +72,19 @@ function splitArr(
 
   return result;
 }
-type CategoryMenuProps = {
+
+type CategoryMenuType = {
   baseUrl: string;
   mainCategoryName: string;
-  categoryData: Array<any>;
+  categoryData?: Array<SubCategoryInfo> | undefined;
   col?: number;
 };
-
 export default function CategoryMenu({
   baseUrl,
   mainCategoryName,
   categoryData = [],
   col = 2,
-}: any): JSX.Element {
+}: CategoryMenuType): JSX.Element {
   const arr = splitArr(categoryData, col);
 
   return (

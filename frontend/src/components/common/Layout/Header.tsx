@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { COLOR, SVG } from "../../../constants/style";
 import { HEADER } from "../../../constants/layout";
 // import Logo from '/asset/';
-import { KEY_NAME } from "../../../constants/message";
 import { useHistory } from "react-router-dom";
+import { fetchGet } from "../../../fetch";
 
 type CategoryType = {
   mainCategory: string;
   subCategory?: string;
 };
+
+type APIResponse = { success: boolean; data?: { no: string; name: string } };
 
 const Layer = styled.div`
   z-index: 3000;
@@ -34,19 +36,17 @@ const Title = styled.h2`
   color: #fff;
 `;
 
-const getCategoryName = (
-  mainCategory: string,
-  subCategory: string | undefined
-): string => {
-  if (subCategory) return KEY_NAME[mainCategory].subCategory[subCategory].name;
-  return KEY_NAME[mainCategory]?.name;
-};
-
 const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
-  // const categoryName = getCategoryName(mainCategory, subCategory);
-  const categoryName = "";
+  const [categoryName, setCategoryName] = useState(mainCategory || "");
+  useEffect(() => {
+    if (subCategory) {
+      fetchGet<APIResponse>(
+        `/api/category/info/subcategory/${subCategory}`
+      ).then((res: APIResponse) => setCategoryName(res.data?.name || ""));
+    }
+    return (): void => setCategoryName(mainCategory);
+  }, [mainCategory, subCategory]);
   const history = useHistory();
-
   return (
     <Layer>
       <Item onClick={(): void => history.goBack()}>
