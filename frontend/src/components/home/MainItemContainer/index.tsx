@@ -7,6 +7,7 @@ import { ItemType } from "../../../types/ItemType";
 
 const Wrapper = styled.div`
   padding: 25px 15px;
+  height: 450px;
 `;
 
 const Goods = styled.div`

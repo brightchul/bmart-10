@@ -25,6 +25,7 @@ export default function ResultList(): JSX.Element {
             key={`${cur.name}/${index}`}
             title={cur.name}
             price={cur.cost}
+            discount={cur.discount}
             imageURL={cur.imageUrl}
           />
         );

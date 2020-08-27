@@ -12,6 +12,10 @@ const Wrapper = styled.div<{ innerHeight: number | undefined }>`
 
   display: flex;
   flex-direction: column;
+
+  border: 1px solid #e8e8e8;
+  margin-top: -1px;
+  margin-left: -1px;
 `;
 
 const Row = styled.div`
