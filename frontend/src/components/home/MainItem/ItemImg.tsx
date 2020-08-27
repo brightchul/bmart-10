@@ -68,7 +68,9 @@ export default function ItemImg(): JSX.Element {
   return (
     <ItemImage style={style}>
       <HeartArea
-        onClick={(event: any) => {
+        onClick={(
+          event: React.MouseEvent<HTMLDivElement, MouseEvent>
+        ): void => {
           event.stopPropagation();
           setIsClicked(!isClicked);
         }}
