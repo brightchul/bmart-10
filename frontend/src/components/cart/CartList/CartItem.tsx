@@ -100,7 +100,7 @@ type Props = {
 
 const CartItem = (props: Props): JSX.Element => {
   const { data } = props;
-  const { id, name, cost, discount, cnt, imageUrl, isChecked } = data;
+  const { id, title, cost, discount, amount, imageUrl, checked } = data;
   const salePrice = cost - Math.round(cost * (discount * 0.01));
 
   const cartDispatch = CartContext.useCartDispatch();
@@ -110,16 +110,18 @@ const CartItem = (props: Props): JSX.Element => {
       type: "CHECK_CART_ITEM",
       payload: {
         id,
+        checked: !checked,
       },
     });
   };
 
   const onDecrease = (): void => {
+    const count = amount < 2 ? 1 : amount - 1;
     cartDispatch({
       type: "UPDATE_CART",
       payload: {
         id,
-        type: "minus",
+        amount: count,
       },
     });
   };
@@ -129,7 +131,7 @@ const CartItem = (props: Props): JSX.Element => {
       type: "UPDATE_CART",
       payload: {
         id,
-        type: "plus",
+        amount: amount + 1,
       },
     });
   };
@@ -147,8 +149,8 @@ const CartItem = (props: Props): JSX.Element => {
     <ItemWrapper>
       <TitleWrapper>
         <CheckBoxWrapper onClick={onCheckItem}>
-          <CheckBox isChecked={isChecked} />
-          <p>{name}</p>
+          <CheckBox isChecked={checked} />
+          <p>{title}</p>
         </CheckBoxWrapper>
         <DeleteBtn onClick={onRemove}>삭제</DeleteBtn>
       </TitleWrapper>
@@ -170,12 +172,12 @@ const CartItem = (props: Props): JSX.Element => {
           </div>
           <ChangeCounter>
             <CounterButton
-              style={{ color: cnt === 1 ? COLOR.GREY_3 : COLOR.BLACK }}
+              style={{ color: amount === 1 ? COLOR.GREY_3 : COLOR.BLACK }}
               onClick={onDecrease}
             >
               ㅡ
             </CounterButton>
-            <CounterItem>{cnt}</CounterItem>
+            <CounterItem>{amount}</CounterItem>
             <CounterButton onClick={onIncrease}>+</CounterButton>
           </ChangeCounter>
         </PriceWrapper>

@@ -1,7 +1,7 @@
 export type CartItem = {
   email: string;
   id: string;
-  amount: number;
+  amount: string;
   checked: string;
 };
 
@@ -17,6 +17,6 @@ export type CartListItem = {
   cost: number;
   discount: number;
   amount: number;
-  image_url: string;
+  imageUrl: string;
   checked: string;
 };

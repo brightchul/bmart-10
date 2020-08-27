@@ -18,15 +18,15 @@ const Cart = (): JSX.Element => {
   // totalPrice, deliveryTips, cartItemList - context api
   const cartDispatch = CartContext.useCartDispatch();
 
+  const cartData = CartContext.useCartState();
+  const { cartList } = cartData;
+  const isCart = cartList.length > 0 ? true : false; // 장바구니에 담긴 상품이 있는지 여부
+
   useEffect(() => {
     cartDispatch({
       type: "GET_CART",
     });
   }, []);
-
-  const cartData = CartContext.useCartState();
-  const { cartList } = cartData;
-  const isCart = cartList.length > 0 ? true : false; // 장바구니에 담긴 상품이 있는지 여부
 
   return (
     <Layout>

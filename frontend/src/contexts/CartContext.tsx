@@ -31,7 +31,7 @@ type Action =
       type: "UPDATE_CART";
       payload: {
         id: number;
-        type: string;
+        amount: number;
       };
     }
   | {
@@ -47,6 +47,7 @@ type Action =
       type: "CHECK_CART_ITEM";
       payload: {
         id: number;
+        checked: boolean;
       };
     }
   | {
@@ -70,29 +71,29 @@ const saveCartList = (cartList: Array<CartItemType>): void => {
 const allCartCheckItem = (cartList: Array<CartItemType>): boolean => {
   let isAllChecked = true;
   cartList.forEach((item) => {
-    if (!item.isChecked) isAllChecked = false;
+    if (!item.checked) isAllChecked = false;
   });
 
   return isAllChecked;
 };
 
 const getCartCheckItem = (cartList: Array<CartItemType>): number => {
-  const checkedCartItem = cartList.filter((item) => item.isChecked);
+  const checkedCartItem = cartList.filter((item) => item.checked);
   let totalCount = 0;
   checkedCartItem.forEach((item) => {
-    totalCount += item.cnt;
+    totalCount += item.amount;
   });
 
   return totalCount;
 };
 
 const getTotalPrice = (cartList: Array<CartItemType>): number => {
-  const checkedCartItem = cartList.filter((item) => item.isChecked);
+  const checkedCartItem = cartList.filter((item) => item.checked);
   let totalPrice = 0;
   checkedCartItem.forEach((item) => {
     const salePrice =
       item.cost - Math.round(item.cost * (item.discount * 0.01));
-    totalPrice += salePrice * item.cnt;
+    totalPrice += salePrice * item.amount;
   });
   return totalPrice;
 };
@@ -114,8 +115,9 @@ const updateCartOrder = (
   id: number,
   item: CartItemType
 ): Array<CartItemType> => {
+  const updateArr = cartList;
   const itemIndex = cartList.findIndex((item) => item.id === id);
-  const updateArr = cartList.splice(itemIndex, 1, item);
+  updateArr.splice(itemIndex, 1, item);
   return updateArr;
 };
 
@@ -152,7 +154,7 @@ const reducer = (state: Cart, action: Action): Cart => {
       );
       if (isItemCheck) {
         const prevData = isItemCheck;
-        const prevCount = prevData.cnt;
+        const prevCount = prevData.amount;
         const removeData = state.cartList.filter(
           (cart): CartItemType | boolean => cart.id !== updateItem.id
         );
@@ -160,7 +162,7 @@ const reducer = (state: Cart, action: Action): Cart => {
           ...removeData,
           {
             ...updateItem,
-            cnt: action.payload.count + prevCount,
+            amount: action.payload.count + prevCount,
           },
         ];
       }
@@ -174,17 +176,11 @@ const reducer = (state: Cart, action: Action): Cart => {
         (item) => item.id === action.payload.id
       );
       let updateCartList: Array<CartItemType> = [];
-      let cnt = 0;
       if (updateCartItem) {
-        if (action.payload.type === "plus") {
-          cnt = updateCartItem.cnt + 1;
-        } else {
-          cnt = updateCartItem.cnt < 2 ? 1 : updateCartItem.cnt - 1;
-        }
         // 순서 보장하여 내용 업데이트
         updateCartList = updateCartOrder(state.cartList, action.payload.id, {
           ...updateCartItem,
-          cnt,
+          amount: action.payload.amount,
         });
       }
       return {
@@ -203,7 +199,7 @@ const reducer = (state: Cart, action: Action): Cart => {
     }
     case "REMOVE_CHECKED_CART": {
       const removeCheckCartItem = state.cartList.filter(
-        (item) => !item.isChecked
+        (item) => !item.checked
       );
       return {
         cartList: removeCheckCartItem,
@@ -220,7 +216,7 @@ const reducer = (state: Cart, action: Action): Cart => {
       if (checkCartItem) {
         updateCartList = updateCartOrder(state.cartList, action.payload.id, {
           ...checkCartItem,
-          isChecked: !checkCartItem.isChecked,
+          checked: action.payload.checked,
         });
       }
       return {
@@ -231,7 +227,7 @@ const reducer = (state: Cart, action: Action): Cart => {
     case "ALL_CHECK_CART_ITEM": {
       const allCheckCartItem = state.cartList.map((item) => ({
         ...item,
-        isChecked: !state.isAllChecked,
+        checked: !state.isAllChecked,
       }));
       return {
         cartList: allCheckCartItem,

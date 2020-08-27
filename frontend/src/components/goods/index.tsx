@@ -82,8 +82,8 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
       cost: parseInt(item.cost || "0"),
       discount: parseInt(item.discount || "0"),
       imageUrl: item.imageUrl,
-      isChecked: true,
-      cnt: count,
+      checked: true,
+      amount: count,
     };
 
     return updateItem;

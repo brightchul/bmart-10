@@ -1,17 +1,17 @@
 import mysql from "mysql2/promise";
 import DAO from "./data-access-object";
 import poolOption from "./pool-option";
-import { CartListItem, UserCartList, CartItem } from "../types/dto/cart.dto";
+import { CartListItem, CartItem } from "../types/dto/cart.dto";
 
 const GET_CART_ITEM_LIST = `SELECT
   good_id,
   cart.amount,
-  checked,
+  cart.checked,
   title,
   category_name AS categoryName,
   discount,
   cost,
-  image_url AS imageUrl
+  image_url
 from cart
 JOIN goods
 ON goods.good_id = cart.fk_good_id
@@ -47,39 +47,12 @@ class CartDAO extends DAO {
             cost: row.cost,
             discount: row.discount,
             amount: row.amount,
-            image_url: row.image_url,
+            imageUrl: row.image_url,
             checked: row.checked,
           };
           result = result.concat(curData);
-          // goodItemLength += index === rows.length - 1 ? "?" : "?,";
-          // cartItemIdList = cartItemIdList.concat(row.fk_good_id);
         });
       }
-
-      // const cartItemRows = await this.executeQuery(
-      //   connection,
-      //   GET_GOODS_ITEM + `(${goodItemLength})`,
-      //   cartItemIdList
-      // );
-
-      // if (cartItemRows instanceof Array) {
-      //   cartItemRows.forEach((row: any) => {
-      //     const findCartItem = userCartList.find(
-      //       (item) => item.id === row.good_id
-      //     );
-      //     const curData: CartListItem = {
-      //       id: row.good_id,
-      //       title: row.title,
-      //       cost: row.cost,
-      //       discount: row.discount,
-      //       amount: findCartItem?.amount || 1,
-      //       image_url: row.image_url,
-      //       checked: findCartItem?.checked || "true",
-      //     };
-      //     result = result.concat(curData);
-      //   });
-      // }
-
       await connection.commit();
     } catch (error) {
       console.log(error);
