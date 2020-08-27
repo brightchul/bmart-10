@@ -67,6 +67,16 @@ type Props = {
   price: number;
 };
 
+function trimText(text: string): string {
+  if (!text) {
+    return "";
+  }
+  if (text.length > 20) {
+    return text.substring(0, 20) + "...";
+  }
+  return text;
+}
+
 export default function SearchBar(props: Props): JSX.Element {
   const history = useHistory();
 
@@ -76,14 +86,14 @@ export default function SearchBar(props: Props): JSX.Element {
     <Wrapper onClick={(): void => history.push(`/goods/${props.id}`)}>
       <LazyImage imageURL={props.imageURL} />
       <Information>
-        <Title>{props.title}</Title>
+        <Title>{trimText(props.title)}</Title>
         {props.discount > 0 && (
           <SaleSection>
-            <Price>{props.price}원</Price>
+            <Price>{props.price.toLocaleString()}원</Price>
             <Sale>-{props.discount}%</Sale>
           </SaleSection>
         )}
-        <DiscountedPrice>{discountedPrice}원</DiscountedPrice>
+        <DiscountedPrice>{discountedPrice.toLocaleString()}원</DiscountedPrice>
       </Information>
     </Wrapper>
   );
