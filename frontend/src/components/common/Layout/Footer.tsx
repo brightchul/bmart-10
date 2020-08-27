@@ -8,6 +8,7 @@ import { COLOR, SVG_ICON } from "../../../constants/style";
 import { FOOTER } from "../../../constants/layout";
 
 import * as ROUTES from "../../../constants/routes";
+import { CartContext } from "../../../contexts";
 
 const Wrap = styled.div`
   position: fixed;
@@ -45,6 +46,20 @@ const Item = styled.div`
   justify-content: center;
 `;
 
+const CartAmount = styled.div`
+  width: 25px;
+  height: 25px;
+  background: ${COLOR.GREEN_1};
+  color: ${COLOR.WHITE};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  position: absolute;
+  top: 5px;
+  margin-left: 40px;
+`;
+
 const navList = [
   {
     path: ROUTES.HOME.path,
@@ -75,6 +90,8 @@ type Props = {
 };
 
 const NavItem = (props: Props): JSX.Element => {
+  const cartData = CartContext.useCartState();
+  const { checkItemAmount } = cartData;
   const { path, name, svg } = props;
   return (
     <NavLink exact to={path} activeClassName="nav_selected" className="nav">
@@ -83,6 +100,11 @@ const NavItem = (props: Props): JSX.Element => {
           window.onscroll = null;
         }}
       >
+        {path === "/cart" && checkItemAmount !== 0 && (
+          <CartAmount>
+            {checkItemAmount >= 100 ? 99 : checkItemAmount}
+          </CartAmount>
+        )}
         <Svg size={36} fill={COLOR.GREY_2} path={svg} />
         <p>{name}</p>
       </Item>

@@ -95,8 +95,8 @@ const OrderBtn = (): JSX.Element => {
       <Btn onClick={orderAction}>
         {totalPrice >= 5000 ? (
           <>
-            <Count>{checkItemAmount}</Count>
-            <Price>{totalPrice}원 배달 주문하기</Price>
+            <Count>{checkItemAmount >= 100 ? 99 : checkItemAmount}</Count>
+            <Price>{totalPrice.toLocaleString()}원 배달 주문하기</Price>
           </>
         ) : (
           <Price>최소 금액을 맞춰주세요.</Price>
