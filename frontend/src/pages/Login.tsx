@@ -57,6 +57,10 @@ const Bottom = styled.div`
   text-align: center;
   color: ${COLOR.GREEN_1};
   font-weight: 600;
+
+  > p {
+    margin-bottom: 10px;
+  }
 `;
 
 const Login = (): JSX.Element => {
@@ -127,6 +131,10 @@ const Login = (): JSX.Element => {
     history.push("/register");
   };
 
+  const goBack = (): void => {
+    history.goBack();
+  };
+
   return (
     <Wrapper>
       <Image>
@@ -150,6 +158,7 @@ const Login = (): JSX.Element => {
       </Form>
       <Bottom>
         <p onClick={goRegister}>회원가입</p>
+        <p onClick={goBack}>이전 페이지로</p>
       </Bottom>
     </Wrapper>
   );
