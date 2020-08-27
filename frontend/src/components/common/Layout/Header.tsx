@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { COLOR, SVG } from "../../../constants/style";
+import { COLOR, SVG_ICON } from "../../../constants/style";
 import { HEADER } from "../../../constants/layout";
 // import Logo from '/asset/';
 import { useHistory } from "react-router-dom";
@@ -51,7 +51,7 @@ const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
     <Layer>
       <Item onClick={(): void => history.goBack()}>
         <svg width={36} height="36px">
-          <path fill={COLOR.WHITE} d={SVG.ARROW_BACK} />
+          <path fill={COLOR.WHITE} d={SVG_ICON.ARROW_BACK} />
         </svg>
       </Item>
       <div>

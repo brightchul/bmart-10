@@ -1,6 +1,6 @@
 import React from "react";
 import style from "styled-components";
-import { COLOR, SVG } from "../../../constants/style";
+import { COLOR, SVG_ICON } from "../../../constants/style";
 import Svg from "../Svg";
 import { PopUpContext } from "../../../contexts";
 
@@ -74,7 +74,7 @@ const PopUp = (props: Props): JSX.Element | null => {
     <Wrapper onClick={onClose}>
       <PopUpBox>
         <CancelBtn onClick={(): void => dispatch({ type: "POPUP_CLOSE" })}>
-          <Svg path={SVG.CANCEL} size={25} fill={COLOR.BLACK} />
+          <Svg path={SVG_ICON.CANCEL} size={25} fill={COLOR.BLACK} />
         </CancelBtn>
         <Content>{state.content}</Content>
         <ConfirmBtn onClick={state.confirmAction}>확인</ConfirmBtn>

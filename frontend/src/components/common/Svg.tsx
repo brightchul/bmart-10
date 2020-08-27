@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
   size: number;
@@ -11,7 +11,7 @@ const SVG = (props: Props): JSX.Element => {
 
   return (
     <svg width={`${size}px`} height={`${size}px`}>
-      <path fill={fill} d={path} />
+      <path fill={fill} d={path} fillRule="evenodd" />
     </svg>
   );
 };
