@@ -14,6 +14,7 @@ const BtnWrapper = style.div`
 
 const Btn = style.button`
   width: 100%;
+  min-height: 47px;
   border: 1px solid ${COLOR.GREEN_1};
   background: ${COLOR.GREEN_1};
   padding: 10px;
@@ -58,7 +59,25 @@ const OrderBtn = (): JSX.Element => {
   const orderAction = (): void => {
     const token = localStorage.getItem("token");
     if (token) {
+      // 최소 금액 확인
+      if (totalPrice < 5000) {
+        popupDispatch({
+          type: "POPUP_OPEN",
+          payload: {
+            content: "최소금액을 맞춰주세요.",
+            confirmAction: (): void => popupDispatch({ type: "POPUP_CLOSE" }),
+          },
+        });
+        return;
+      }
       // 구매하기
+      popupDispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: "개발중입니다..",
+          confirmAction: (): void => popupDispatch({ type: "POPUP_CLOSE" }),
+        },
+      });
     } else {
       // 로그인 페이지로 유도
       popupDispatch({
@@ -74,8 +93,14 @@ const OrderBtn = (): JSX.Element => {
   return (
     <BtnWrapper>
       <Btn onClick={orderAction}>
-        <Count>{checkItemAmount}</Count>
-        <Price>{totalPrice}원 배달 주문하기</Price>
+        {totalPrice >= 5000 ? (
+          <>
+            <Count>{checkItemAmount}</Count>
+            <Price>{totalPrice}원 배달 주문하기</Price>
+          </>
+        ) : (
+          <Price>최소 금액을 맞춰주세요.</Price>
+        )}
       </Btn>
     </BtnWrapper>
   );
