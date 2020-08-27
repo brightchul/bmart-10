@@ -21,6 +21,7 @@ const ORDER_BY_RANDOM = `ORDER BY RAND() LIMIT 4`;
 
 const SELECT_NEW_GOODS = `select * from goods where delete_flag = 0 order by created_at desc`;
 const SELECT_POPULAR_GOODS = `select * from goods where delete_flag = 0 order by order_cnt desc`;
+const SELECT_DISCOUNT_GOODS = `select * from goods where delete_flag = 0 order by discount desc`;
 
 type Row = {
   good_id: number;
@@ -204,6 +205,20 @@ class GoodsDAO extends DAO {
   }) {
     const result = await this.getInfo(
       Query.of(SELECT_POPULAR_GOODS).limit(startIdx, offset).build(),
+      []
+    );
+    return result;
+  }
+
+  async getDiscountGoods({
+    startIdx,
+    offset,
+  }: {
+    startIdx?: number;
+    offset?: number;
+  }) {
+    const result = await this.getInfo(
+      Query.of(SELECT_DISCOUNT_GOODS).limit(startIdx, offset).build(),
       []
     );
     return result;

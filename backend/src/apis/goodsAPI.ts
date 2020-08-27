@@ -181,4 +181,46 @@ router.get("/popular", async (request: Request, response: Response) => {
   response.status(200).send(apiResponse);
 });
 
+/**
+ * @api {get} /api/goods/discount 할인 상품 리스트 반환
+ * @apiName  discount GoodsInfo list
+ * @apiGroup Goods
+ * @apiQuery startIdx {number} 시작 인덱스 번호
+ * @apiQuery offset {number} 개수
+ *
+ * @apiSuccess {Boolean} success API 성공 여부
+ * @apiSuccess {Object} data 할인 상품들의 상품 리스트
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "data" : [
+ *           {"goodId": number, "title": string, "price": string, "sale": string, "src": string}
+ *       ]
+ *     }
+ *
+ * @apiError NotFound
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "success": false,
+ *     }
+ */
+router.get("/discount", async (request: Request, response: Response) => {
+  const startIdx = parseRequestQueryToInt(request.query.startIdx as string);
+  const offset = parseRequestQueryToInt(request.query.offset as string);
+
+  const apiResponse: APIResponse = {
+    success: false,
+  };
+
+  const result = await goodsDAO.getDiscountGoods({ startIdx, offset });
+
+  apiResponse.success = true;
+  apiResponse.data = result;
+  response.status(200).send(apiResponse);
+});
+
 export default router;
