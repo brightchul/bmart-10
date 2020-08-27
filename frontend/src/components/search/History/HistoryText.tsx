@@ -60,7 +60,7 @@ export default function SearchBar(props: Props): JSX.Element {
   return (
     <Wrapper>
       <Text
-        onClick={() => {
+        onClick={(): void => {
           const query: string = props.children || "";
 
           state.input.value = query;
@@ -77,7 +77,7 @@ export default function SearchBar(props: Props): JSX.Element {
         {trimText(props.children)}
       </Text>
       <RemoveButton
-        onClick={() => {
+        onClick={(): void => {
           deleteHistoryByIndex(props.index);
 
           const histories = getHistory();
