@@ -11,7 +11,12 @@ import { getAdsData } from "../mock";
 
 import { PULL_TO } from "../constants/layout";
 import { ItemType } from "../types/ItemType";
-import { getCategoryGoods } from "../fetch/category";
+import {
+  getCategoryGoods,
+  getPopularGoods,
+  getDiscountGoods,
+  getNewGoods,
+} from "../fetch/category";
 
 type ArrCategoryGoods = Array<ItemType> | undefined;
 
@@ -70,7 +75,13 @@ export default function Home(): JSX.Element {
     observable.trigger(Math.min(screenY - scrollStart, PULL_TO.SIZE));
   }
 
-  const [[foodList, livingList], setList] = useState([
+  const [
+    [foodList, livingList, discountList, newList, popularList],
+    setList,
+  ] = useState([
+    [] as ArrCategoryGoods,
+    [] as ArrCategoryGoods,
+    [] as ArrCategoryGoods,
     [] as ArrCategoryGoods,
     [] as ArrCategoryGoods,
   ]);
@@ -90,9 +101,35 @@ export default function Home(): JSX.Element {
         startIdx: 0,
         offset: 36,
       }),
-    ]).then(([newFoodList, newLivingList]): void => {
-      setList([newFoodList, newLivingList]);
-    });
+      getDiscountGoods({
+        startIdx: 0,
+        offset: 5,
+      }),
+      getNewGoods({
+        startIdx: 0,
+        offset: 10,
+      }),
+      getPopularGoods({
+        startIdx: 0,
+        offset: 10,
+      }),
+    ]).then(
+      ([
+        updatedFoodList,
+        updatedLivingList,
+        updatedDiscountList,
+        updatedNewList,
+        updatedPopularList,
+      ]): void => {
+        setList([
+          updatedFoodList,
+          updatedLivingList,
+          updatedDiscountList,
+          updatedNewList,
+          updatedPopularList,
+        ]);
+      }
+    );
   }, []);
 
   return (
@@ -112,15 +149,15 @@ export default function Home(): JSX.Element {
             )
           )}
         </HorizontalSlider>
-        <MainItemGallery data={(foodList || []).slice(0, 4)} />
+        <MainItemGallery data={discountList || []} />
         <MainItemContainer data={foodList}>지금 뭐 먹지?</MainItemContainer>
         <HorizontalSlider title={"새로 나왔어요"} isMore>
-          {(livingList?.slice(5, 20) || []).map((item: Data, idx: number) => (
+          {(newList || []).map((item: Data, idx: number) => (
             <MainItem key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
         <HorizontalSlider title={"요즘 잘 팔려요"} isMore>
-          {(livingList?.slice(5, 20) || []).map((item: Data, idx: number) => (
+          {(popularList || []).map((item: Data, idx: number) => (
             <MainItem key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
