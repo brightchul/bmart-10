@@ -19,9 +19,9 @@ const SEARCH_MAIN_CATEGORY_GOODS = `
 
 const ORDER_BY_RANDOM = `ORDER BY RAND() LIMIT 4`;
 
-const SELECT_NEW_GOODS = `select * from goods where delete_flag = 0 order by created_at desc`;
-const SELECT_POPULAR_GOODS = `select * from goods where delete_flag = 0 order by order_cnt desc`;
-const SELECT_DISCOUNT_GOODS = `select * from goods where delete_flag = 0 order by discount desc`;
+const SELECT_NEW_GOODS = `select good_id AS goodId ,title ,category_name AS categoryName ,created_at AS createdAt ,cost ,discount ,amount ,image_url AS imageUrl  from goods where delete_flag = 0 order by created_at desc`;
+const SELECT_POPULAR_GOODS = `select good_id AS goodId ,title ,category_name AS categoryName ,created_at AS createdAt ,cost ,discount ,amount ,image_url AS imageUrl  from goods where delete_flag = 0 order by order_cnt desc`;
+const SELECT_DISCOUNT_GOODS = `select good_id AS goodId ,title ,category_name AS categoryName ,created_at AS createdAt ,cost ,discount ,amount ,image_url AS imageUrl  from goods where delete_flag = 0 order by discount desc`;
 
 type Row = {
   good_id: number;
