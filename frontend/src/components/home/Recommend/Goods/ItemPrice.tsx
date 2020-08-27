@@ -4,13 +4,13 @@ import styled from "styled-components";
 const Wrapper = styled.div``;
 
 const Sale = styled.span`
-  font-size: 1em;
+  font-size: 16px;
   font-weight: 800;
   color: #f01616;
 `;
 
 const Price = styled.span`
-  font-size: 1em;
+  font-size: 16px;
   padding-left: 3px;
   font-weight: 500;
   color: #bbb;
@@ -18,6 +18,8 @@ const Price = styled.span`
 `;
 
 const DiscountedPrice = styled.div`
+  font-size: 16px;
+  font-weight: bold;
   text-align: right;
 `;
 
