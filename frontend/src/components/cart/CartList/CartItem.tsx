@@ -1,6 +1,8 @@
 import React from "react";
 import style from "styled-components";
+import { useHistory } from "react-router-dom";
 
+import { imgURL } from "../../../utils/func";
 import { COLOR } from "../../../constants/style";
 import { CheckBox } from "../../common";
 import { CartItemType } from "../../../types/Cart";
@@ -99,6 +101,7 @@ type Props = {
 };
 
 const CartItem = (props: Props): JSX.Element => {
+  const history = useHistory();
   const { data } = props;
   const { id, title, cost, discount, amount, imageUrl, checked } = data;
   const salePrice = cost - Math.round(cost * (discount * 0.01));
@@ -155,8 +158,8 @@ const CartItem = (props: Props): JSX.Element => {
         <DeleteBtn onClick={onRemove}>삭제</DeleteBtn>
       </TitleWrapper>
       <ContentWrapper>
-        <ImgWrapper>
-          <img src={imageUrl} />
+        <ImgWrapper onClick={(): void => history.push(`/goods/${id}`)}>
+          <img src={imgURL(imageUrl)} />
         </ImgWrapper>
         <PriceWrapper>
           <div>
