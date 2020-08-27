@@ -65,10 +65,10 @@ export default function ItemPrice(): JSX.Element {
       {saleValue > 0 && (
         <div style={{ marginTop: MARGIN_TOP }}>
           <Sale>{discount}%</Sale>
-          <Price>{cost}원</Price>
+          <Price>{cost?.toLocaleString()}원</Price>
         </div>
       )}
-      <DiscountedPrice>{discountedPrice}원</DiscountedPrice>
+      <DiscountedPrice>{discountedPrice?.toLocaleString()}원</DiscountedPrice>
     </div>
   );
 }

@@ -26,6 +26,7 @@ import { PopUpContext, CartContext } from "../../contexts";
 import { MESSAGE } from "../../constants/message";
 import getGoodsById from "../../fetch/goods/getGoodsByGoodId";
 import { ItemType } from "../../types/ItemType";
+import { imgURL } from "../../utils/func";
 
 const Container = styled.div`
   margin-top: -15px;
@@ -141,21 +142,21 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
         <HideAreaContent>
           <ItemContent>
             <ItemImg
-              style={{ backgroundImage: `url(${item?.imageUrl})` }}
+              style={{ backgroundImage: `url(${imgURL(item?.imageUrl)})` }}
             ></ItemImg>
 
             <ItemInfo>
               <ul>
                 <li>{item?.title}</li>
                 <li>1회 최대 구매수량 10개</li>
-                <li>{cost}원</li>
+                <li>{cost.toLocaleString()}원</li>
               </ul>
             </ItemInfo>
             <Counter setCount={setCount} count={count}></Counter>
           </ItemContent>
           <BagButton onClick={addCart}>
-            <span>{count}개 담기 </span>
-            <RightSpan>{count * cost}원</RightSpan>
+            <span>{count?.toLocaleString()}개 담기 </span>
+            <RightSpan>{(count * cost).toLocaleString()}원</RightSpan>
           </BagButton>
         </HideAreaContent>
       </HideArea>
