@@ -2,20 +2,9 @@ import { Router, Request, Response } from "express";
 import { APIResponse } from "../types/APIResponse";
 
 import categoryDAO from "../daos/category.dao";
+import { parseRequestQueryToInt } from "../util/util";
 
 const router = Router();
-
-/**
- * 숫자가 request query로 넘어올때만 값을 넘기고 그외에는 undefined로 받도록 하기 위해서 만듬.
- * 원래는 parseInt(value) || undefined로 하려했으나 '0'의 경우 처리가 안되고 undefined로 넘어가서 그것을 막기위함.
- *
- * @param {string} value 파싱할 값
- */
-const parseRequestQueryToInt = (value?: string): number | undefined => {
-  const result = parseInt(value as string);
-  if (Number.isNaN(result)) return undefined;
-  return result;
-};
 
 /**
  * @api {get} /api/category/list/:mainCategoryName 메인 카테고리 이름으로 서브카테고리 정보를 가져온다.
