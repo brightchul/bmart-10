@@ -20,7 +20,7 @@ const Wrapper = styled.div<{ innerHeight: number | undefined }>`
 
 const Row = styled.div`
   width: calc(100% - 20px);
-  margin: 10px;
+  margin: 5px 10px 15px 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

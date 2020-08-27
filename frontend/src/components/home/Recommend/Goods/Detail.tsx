@@ -11,10 +11,11 @@ const Wrapper = styled.div`
 
 const ItemTitle = styled.div`
   white-space: break-spaces;
-  height: 2rem;
+  height: 40px;
   line-height: 1rem;
 
   font-size: 1rem;
+  overflow: hidden;
 `;
 
 type Props = {
@@ -23,10 +24,20 @@ type Props = {
   sale: number;
 };
 
+function trimText(text: string): string {
+  if (!text) {
+    return "";
+  }
+  if (text.length > 20) {
+    return text.substring(0, 20) + "...";
+  }
+  return text;
+}
+
 export default function Detail(props: Props): JSX.Element {
   return (
     <Wrapper>
-      <ItemTitle>{props.title}</ItemTitle>
+      <ItemTitle>{trimText(props.title)}</ItemTitle>
       <ItemPrice price={props.price} sale={props.sale} />
     </Wrapper>
   );

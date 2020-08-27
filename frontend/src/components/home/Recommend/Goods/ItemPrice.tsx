@@ -38,10 +38,10 @@ export default function ItemPrice(props: Props): JSX.Element {
       {props.sale > 0 && (
         <>
           <Sale>-{props.sale}%</Sale>
-          <Price>{props.price}원</Price>
+          <Price>{props.price.toLocaleString()}원</Price>
         </>
       )}
-      <DiscountedPrice>{discountedPrice}원</DiscountedPrice>
+      <DiscountedPrice>{discountedPrice.toLocaleString()}원</DiscountedPrice>
     </Wrapper>
   );
 }
