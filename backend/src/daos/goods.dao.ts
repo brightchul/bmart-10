@@ -6,6 +6,8 @@ import { Goods } from "../types/dto/goods.dto";
 
 const CREATE_GOODS = `INSERT INTO goods (title, category_name, cost, discount, amount, image_url) VALUES (?, ?, ?, ?, ?, ?)`;
 const SEARCH_QUERY = `SELECT * FROM \`goods\` WHERE \`title\` LIKE (?)`;
+const SELECT_GOODS =
+  "SELECT good_id AS goodId ,title ,category_name AS categoryName ,created_at AS createdAt ,cost ,discount ,amount ,image_url AS imageUrl FROM goods WHERE good_id = ?";
 const SEARCH_SUB_CATEGORY_LIST_FROM_MAIN = `SELECT name, sub_category_array as subCategories FROM main_category`;
 
 const SEARCH_MAIN_CATEGORY_GOODS = `
@@ -28,6 +30,16 @@ type Row = {
   delete_flag: boolean;
 };
 
+type GoodsInfo = {
+  goodId: number;
+  title: string;
+  categoryName: string;
+  createdAt: Date;
+  cost: number;
+  discount: number;
+  amount: number;
+  imageUrl: string;
+};
 type Recommend = {
   title: string;
   goodsData: Goods[];
