@@ -51,12 +51,12 @@ export default function Goods({ goodId }: { goodId: string }): JSX.Element {
     const goodId = item.goodId || 0;
     const updateItem: CartItemType = {
       id: goodId,
-      name: item.title,
+      title: item.title,
       cost: parseInt(item.price),
       discount: parseInt(item.sale) || 0,
       imageUrl: item.src,
-      isChecked: true,
-      cnt: count,
+      checked: true,
+      amount: count,
     };
 
     return updateItem;

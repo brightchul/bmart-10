@@ -1,9 +1,9 @@
 export type CartItemType = {
   id: number;
-  name: string;
+  title: string;
   cost: number;
   discount: number;
   imageUrl: string;
-  isChecked: boolean;
-  cnt: number;
+  checked: boolean;
+  amount: number;
 };
