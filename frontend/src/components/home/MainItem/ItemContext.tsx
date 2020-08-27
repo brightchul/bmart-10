@@ -5,6 +5,7 @@ export type ItemContextType = {
   title?: string;
   cost?: string;
   sale?: string;
+  discount?: string;
   width?: string;
   imageUrl?: string;
   fontSize?: string;
