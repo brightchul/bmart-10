@@ -4,13 +4,13 @@ import { ItemContext, ItemContextType } from "./ItemContext";
 
 type ValueType = {
   cost?: string;
-  sale?: string;
+  discount?: string;
   saleValue?: number;
   discountedPrice?: number;
 };
 
 const DEFAULT_PRICE = "0";
-const DEFAULT_SALE = "0%";
+const DEFAULT_DISCOUNT = "0%";
 
 const MARGIN_TOP = "-5px";
 
@@ -32,8 +32,8 @@ const DiscountedPrice = styled.div`
   font-weight: 800;
 `;
 
-const getSaleValue = (sale: string): number => {
-  const saleValue = parseInt(sale);
+const getSaleValue = (discount: string): number => {
+  const saleValue = parseInt(discount);
   return Number.isNaN(saleValue) ? 0 : saleValue;
 };
 
@@ -44,24 +44,27 @@ const getDiscountPrice = (price: string, saleValue: number): number => {
 
 const getValues = ({
   cost = DEFAULT_PRICE,
-  sale = DEFAULT_SALE,
+  discount = DEFAULT_DISCOUNT,
 }: ItemContextType): ValueType => {
-  const saleValue: number = getSaleValue(sale);
+  const saleValue: number = getSaleValue(discount);
   const discountedPrice = getDiscountPrice(cost, saleValue);
 
-  return { cost, sale, saleValue, discountedPrice };
+  return { cost, discount, saleValue, discountedPrice };
 };
 
 export default function ItemPrice(): JSX.Element {
-  const { cost, sale, saleValue = 0, discountedPrice }: ValueType = getValues(
-    useContext(ItemContext)
-  );
+  const {
+    cost,
+    discount,
+    saleValue = 0,
+    discountedPrice,
+  }: ValueType = getValues(useContext(ItemContext));
 
   return (
     <div>
       {saleValue > 0 && (
         <div style={{ marginTop: MARGIN_TOP }}>
-          <Sale>{sale}</Sale>
+          <Sale>{discount}%</Sale>
           <Price>{cost}원</Price>
         </div>
       )}
