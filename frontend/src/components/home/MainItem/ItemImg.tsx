@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { ItemContext, ItemContextType } from "./ItemContext";
 import { imgURL } from "../../../utils/func";
@@ -64,11 +64,16 @@ const getStyle = ({
 
 export default function ItemImg(): JSX.Element {
   const style = getStyle(useContext(ItemContext));
-
+  const [isClicked, setIsClicked] = useState(false);
   return (
     <ItemImage style={style}>
-      <HeartArea>
-        <Heart>♡</Heart>
+      <HeartArea
+        onClick={(event: any) => {
+          event.stopPropagation();
+          setIsClicked(!isClicked);
+        }}
+      >
+        <Heart style={{ color: isClicked ? "red" : "white" }}>♥</Heart>
       </HeartArea>
     </ItemImage>
   );
