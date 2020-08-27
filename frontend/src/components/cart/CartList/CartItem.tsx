@@ -130,11 +130,12 @@ const CartItem = (props: Props): JSX.Element => {
   };
 
   const onIncrease = (): void => {
+    const count = amount < 10 ? amount + 1 : 10;
     cartDispatch({
       type: "UPDATE_CART",
       payload: {
         id,
-        amount: amount + 1,
+        amount: count,
       },
     });
   };
@@ -181,7 +182,12 @@ const CartItem = (props: Props): JSX.Element => {
               ㅡ
             </CounterButton>
             <CounterItem>{amount}</CounterItem>
-            <CounterButton onClick={onIncrease}>+</CounterButton>
+            <CounterButton
+              style={{ color: amount === 10 ? COLOR.GREY_3 : COLOR.BLACK }}
+              onClick={onIncrease}
+            >
+              +
+            </CounterButton>
           </ChangeCounter>
         </PriceWrapper>
       </ContentWrapper>
