@@ -21,7 +21,7 @@ const ButtonWrapper = styled.div`
   margin-top: 10px;
   text-align: center;
   width: 65px;
-  height: 65px;
+  height: 80px;
 
   &:active {
     animation-duration: 0.3s;
