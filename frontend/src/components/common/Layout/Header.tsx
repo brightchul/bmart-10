@@ -6,7 +6,6 @@ import { COLOR, SVG_ICON } from "../../../constants/style";
 import { HEADER } from "../../../constants/layout";
 import SVG from "../Svg";
 import { fetchGet } from "../../../fetch";
-import { format } from "util";
 
 type CategoryType = {
   mainCategory: string;
