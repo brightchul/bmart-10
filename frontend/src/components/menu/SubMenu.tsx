@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
+import mappingTable from "./dummy.mapping";
+
 const ACTIVE_BACKGROUND = `#e8e8e8`;
 const BORDER_COLOR = `#e8e8e8`;
 
@@ -116,7 +118,9 @@ export default function SubMenu(props: Props): JSX.Element {
               <List
                 key={cur}
                 onClick={(): void => {
-                  history.push(`/category/${cur}`);
+                  history.push(
+                    `/category/${props.leftSide.title}/${mappingTable[cur]}`
+                  );
                 }}
               >
                 {cur}
@@ -140,7 +144,9 @@ export default function SubMenu(props: Props): JSX.Element {
               <List
                 key={cur}
                 onClick={(): void => {
-                  history.push(`/category/${cur}`);
+                  history.push(
+                    `/category/${props.rightSide?.title}/${mappingTable[cur]}`
+                  );
                 }}
               >
                 {cur}
