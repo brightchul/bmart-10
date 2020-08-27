@@ -65,7 +65,7 @@ const Category = ({
           }}
         >
           {data.map((item: ItemType, idx: number) => {
-            return <MainItem key={idx + ""} {...item} />;
+            return <MainItem key={idx + ""} fontSize="0.8em" {...item} />;
           })}
         </HorizontalSlider>
       )}

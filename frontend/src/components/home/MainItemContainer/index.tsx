@@ -6,8 +6,7 @@ import MainItem from "../MainItem";
 import { ItemType } from "../../../types/ItemType";
 
 const Wrapper = styled.div`
-  padding: 25px 15px;
-  height: 450px;
+  padding: 25px 4vw;
 `;
 
 const Goods = styled.div`
@@ -33,7 +32,7 @@ type Props = {
   children: string;
 };
 
-const MAIN_ITEM_FONT_SIZE = "12px";
+const MAIN_ITEM_FONT_SIZE = "0.8em";
 
 const convertDataToMainItem = (data: Data, idx: number): JSX.Element => (
   <MainItem key={idx + ""} fontSize={MAIN_ITEM_FONT_SIZE} {...data}></MainItem>
