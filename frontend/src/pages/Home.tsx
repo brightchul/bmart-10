@@ -74,10 +74,22 @@ export default function Home(): JSX.Element {
     [] as ArrCategoryGoods,
     [] as ArrCategoryGoods,
   ]);
+
+  // createdAt으로 10개 뽑아오기
+  // orderCnt로 10개 뽑아오기
+
   useEffect((): void => {
     Promise.all([
-      getCategoryGoods({ mainCategoryName: "국·반찬·메인요리" }),
-      getCategoryGoods({ mainCategoryName: "생활용품·리빙" }),
+      getCategoryGoods({
+        mainCategoryName: "국·반찬·메인요리",
+        startIdx: 0,
+        offset: 36,
+      }),
+      getCategoryGoods({
+        mainCategoryName: "생활용품·리빙",
+        startIdx: 0,
+        offset: 36,
+      }),
     ]).then(([newFoodList, newLivingList]): void => {
       setList([newFoodList, newLivingList]);
     });
