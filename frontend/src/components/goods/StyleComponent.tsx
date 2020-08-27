@@ -56,6 +56,8 @@ export const HideAreaContent = styled.div`
 `;
 
 export const CounterWapper = styled.div`
+  width: 6em;
+  text-align: center;
   border: 1px solid black;
   padding: 10px;
   display: inline-block;
@@ -64,7 +66,7 @@ export const CounterWapper = styled.div`
 
 export const CounterText = styled.span`
   display: inline-block;
-  width: 3em;
+  width: 2em;
   text-align: center;
 `;
 
@@ -98,6 +100,7 @@ export const ItemImg = styled.div`
 
 export const ItemInfo = styled.div`
   flex-grow: 1;
+  max-width: 50vw;
   padding: 0px 10px;
 `;
 

@@ -14,16 +14,18 @@ const Wrapper = styled.div`
   overflow-y: scroll;
 `;
 
-export default function SearchBar(): JSX.Element {
+export default function ResultList(): JSX.Element {
   const state = useSearchState();
   return (
     <Wrapper>
       {state.searchResult.map((cur, index) => {
         return (
           <GoodInformation
+            id={cur.id}
             key={`${cur.name}/${index}`}
             title={cur.name}
             price={cur.cost}
+            discount={cur.discount}
             imageURL={cur.imageUrl}
           />
         );

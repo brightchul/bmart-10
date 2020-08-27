@@ -29,6 +29,19 @@ class DataAccessObject {
     const execute = await connection.execute(sql, preparedStatement);
     return execute[0];
   }
+  async execute(
+    sql: string,
+    ...preparedStatement: string[]
+  ): Promise<
+    | mysql.RowDataPacket[]
+    | mysql.RowDataPacket[][]
+    | mysql.OkPacket
+    | mysql.OkPacket[]
+    | mysql.ResultSetHeader
+  > {
+    const execute = await this.pool.execute(sql, preparedStatement);
+    return execute[0];
+  }
 
   async isConnectSuccess(): Promise<boolean> {
     let result = false;

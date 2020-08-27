@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import { COLOR } from "../constants/style";
+import { MESSAGE } from "../constants/message";
+
+import { getToken } from "../fetch/user";
+import { PopUpContext } from "../contexts";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -53,12 +57,17 @@ const Bottom = styled.div`
   text-align: center;
   color: ${COLOR.GREEN_1};
   font-weight: 600;
+
+  > p {
+    margin-bottom: 10px;
+  }
 `;
 
 const Login = (): JSX.Element => {
   const history = useHistory();
+  const popupDispatch = PopUpContext.usePopUpDispatch();
   const [user, setUser] = useState({
-    id: "",
+    email: "",
     password: "",
   });
 
@@ -69,12 +78,61 @@ const Login = (): JSX.Element => {
   };
 
   const loginActions = (): void => {
-    localStorage.setItem("token", "token");
-    history.push("/");
+    // 이메일, 비밀번호 확인
+    if (!user.email) {
+      popupDispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: MESSAGE.USER_EMAIL_EMPTY,
+          confirmAction: (): void =>
+            popupDispatch({
+              type: "POPUP_CLOSE",
+            }),
+        },
+      });
+      return;
+    }
+    if (!user.password) {
+      popupDispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: MESSAGE.USER_PASSWORD_EMPTY,
+          confirmAction: (): void =>
+            popupDispatch({
+              type: "POPUP_CLOSE",
+            }),
+        },
+      });
+      return;
+    }
+
+    getToken(user).then((res) => {
+      if (res.success) {
+        // TODO: 사용자 정보 저장?
+        localStorage.setItem("token", res.data.token);
+        history.push("/");
+      } else {
+        // 로그인 실패
+        popupDispatch({
+          type: "POPUP_OPEN",
+          payload: {
+            content: MESSAGE.USER_LOGIN_ERROR,
+            confirmAction: (): void =>
+              popupDispatch({
+                type: "POPUP_CLOSE",
+              }),
+          },
+        });
+      }
+    });
   };
 
   const goRegister = (): void => {
     history.push("/register");
+  };
+
+  const goBack = (): void => {
+    history.goBack();
   };
 
   return (
@@ -84,11 +142,15 @@ const Login = (): JSX.Element => {
         <img src="/asset/images/logo_horizon.png" width={"50%"} />
       </Image>
       <Form>
-        <Input name="id" type="text" onChange={onChange} placeholder="아이디" />
+        <Input
+          name="email"
+          type="text"
+          onChange={onChange}
+          placeholder="이메일"
+        />
         <Input
           name="password"
           type="password"
-          value={user.id}
           onChange={onChange}
           placeholder="비밀번호"
         />
@@ -96,6 +158,7 @@ const Login = (): JSX.Element => {
       </Form>
       <Bottom>
         <p onClick={goRegister}>회원가입</p>
+        <p onClick={goBack}>이전 페이지로</p>
       </Bottom>
     </Wrapper>
   );

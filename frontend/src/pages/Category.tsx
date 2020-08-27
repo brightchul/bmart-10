@@ -1,35 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Layout, HorizontalSlider } from "../components/common";
 import MainItem from "../components/home/MainItem";
 import CategoryMenu from "../components/common/CategoryMenu";
 import Banner from "../components/common/Banner";
-import { getAdsData, getItems } from "../mock";
-import { KEY_NAME } from "../constants/message";
+import { getAdsData } from "../mock";
 import ItemList from "../components/common/ItemList";
-
-type Data = {
-  title: string;
-  price: string;
-  sale: string;
-  src: string;
-  width?: string;
-};
+import { getSubCategoryList, getCategoryGoods } from "../fetch/category";
+import { ItemType } from "../types/ItemType";
 
 type CategoryType = {
   mainCategory?: string;
   subCategory?: string;
 };
 
+type SubCategoryInfo = {
+  no: string;
+  name: string;
+};
+
+type ArrSubCategoryInfo = Array<SubCategoryInfo> | undefined;
+type ArrCategoryGoods = Array<ItemType> | undefined;
+
 const Category = ({
   match: {
-    params: { mainCategory = "", subCategory },
+    params: { mainCategory = "", subCategory = "" },
   },
 }: RouteComponentProps<CategoryType>): JSX.Element => {
-  const subCategoryData = Object.keys(KEY_NAME[mainCategory].subCategory).map(
-    (o) => o
-  );
-  const data = getItems(6);
+  const [[subCategoryDataList, goodsDataList], setDataArr] = useState([
+    [] as ArrSubCategoryInfo,
+    [] as ArrCategoryGoods,
+  ]);
+
+  useEffect(() => {
+    Promise.all([
+      getSubCategoryList(mainCategory),
+      getCategoryGoods({
+        mainCategoryName: mainCategory,
+        subCategoryNo: subCategory,
+      }),
+    ]).then(([newSubCategoryDataList, newGoodsDataList]) => {
+      setDataArr([newSubCategoryDataList, newGoodsDataList]);
+    });
+    return (): void => setDataArr([subCategoryDataList, []]);
+  }, [mainCategory, subCategory]);
+
+  const data = (goodsDataList || []).slice(0, 6);
   return (
     <Layout mainCategory={mainCategory} subCategory={subCategory}>
       {!subCategory && <Banner advertiseData={getAdsData()}></Banner>}
@@ -37,7 +53,7 @@ const Category = ({
         <CategoryMenu
           baseUrl={`/category${"/" + mainCategory}`}
           mainCategoryName={mainCategory}
-          categoryData={subCategoryData}
+          categoryData={subCategoryDataList}
         ></CategoryMenu>
       )}
       {!subCategory && (
@@ -48,12 +64,12 @@ const Category = ({
             console.log("새로 나온거 더보기...");
           }}
         >
-          {data.map((item: Data, idx: number) => {
+          {data.map((item: ItemType, idx: number) => {
             return <MainItem key={idx + ""} {...item} />;
           })}
         </HorizontalSlider>
       )}
-      <ItemList data={getItems(40)}></ItemList>
+      <ItemList data={goodsDataList || ([] as ItemType[])}></ItemList>
     </Layout>
   );
 };

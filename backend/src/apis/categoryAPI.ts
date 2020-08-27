@@ -2,23 +2,12 @@ import { Router, Request, Response } from "express";
 import { APIResponse } from "../types/APIResponse";
 
 import categoryDAO from "../daos/category.dao";
+import { parseRequestQueryToInt } from "../util/util";
 
 const router = Router();
 
 /**
- * 숫자가 request query로 넘어올때만 값을 넘기고 그외에는 undefined로 받도록 하기 위해서 만듬.
- * 원래는 parseInt(value) || undefined로 하려했으나 '0'의 경우 처리가 안되고 undefined로 넘어가서 그것을 막기위함.
- *
- * @param {string} value 파싱할 값
- */
-const parseRequestQueryToInt = (value?: string): number | undefined => {
-  const result = parseInt(value as string);
-  if (Number.isNaN(result)) return undefined;
-  return result;
-};
-
-/**
- * @api {get} /api/category/list/:mainCategoryName 상품 이름으로 검색
+ * @api {get} /api/category/list/:mainCategoryName 메인 카테고리 이름으로 서브카테고리 정보를 가져온다.
  * @apiName CategoryList by mainCategoryName
  * @apiGroup Category
  *
@@ -66,6 +55,53 @@ router.get(
 
     apiResponse.success = true;
     apiResponse.data = [...subCategoryInfoArr];
+    response.status(200).send(apiResponse);
+  }
+);
+
+/**
+ * @api {get} /api/category/info/subcategory/:subCategoryNo 메인 카테고리 이름으로 서브카테고리 정보를 가져온다.
+ * @apiName subCategoryInfo by subCategoryNo
+ * @apiGroup Category
+ *
+ * @apiParam {String} subCategoryNo
+ *
+ * @apiSuccess {Boolean} success API 성공 여부
+ * @apiSuccess {Object} data 서브카테고리 정보들
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "data" : {"name": string, "no": number}
+ *     }
+ *
+ * @apiError NotFound
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "success": false,
+ *     }
+ */
+router.get(
+  "/info/subcategory/:subCategoryNo",
+  async (request: Request, response: Response) => {
+    const { subCategoryNo } = request.params;
+    const apiResponse: APIResponse = {
+      success: false,
+    };
+
+    if (!subCategoryNo) {
+      return response.status(404).send(apiResponse);
+    }
+
+    const subCategoryInfo = await categoryDAO.getSubCategoryInfoByNo(
+      subCategoryNo
+    );
+
+    apiResponse.success = true;
+    apiResponse.data = subCategoryInfo;
     response.status(200).send(apiResponse);
   }
 );

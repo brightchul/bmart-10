@@ -7,13 +7,18 @@ import Menu from "./Menu";
 
 import { RECOMMEND_SECTION } from "../../../constants/layout";
 
-const THRESHOLD = 2740;
+let THRESHOLD = 2740;
 const DEBOUNCE_TIME = 20;
+
+const WW = styled.div<{ innerHeight: number }>`
+  width: 100%;
+  height: ${(props): number => props.innerHeight}px;
+`;
 
 const Wrapper = styled.div<{ innerHeight: number }>`
   width: 100%;
   height: ${(props): number => props.innerHeight}px;
-
+  position: absolute;
   background-color: #eee;
 
   &.sticky {
@@ -74,36 +79,45 @@ export default function Menus(props: Props): JSX.Element {
   };
 
   return (
-    <Wrapper
-      innerHeight={props.innerHeight || 50}
-      ref={(el): void => {
-        wrapper = el;
-      }}
-    >
-      <Flicking
-        duration={500}
-        gap={10}
-        ref={(e: Flicking): void => {
-          flicking = e;
-          highlightObserver.trigger(props.menus[0]);
+    <WW innerHeight={props.innerHeight || 50}>
+      <Wrapper
+        innerHeight={props.innerHeight || 50}
+        ref={(el: HTMLDivElement | null): void => {
+          if (el) {
+            const bounding = el.getBoundingClientRect();
+            const height = window.pageYOffset;
+
+            THRESHOLD = Math.floor(height + bounding.top - 80);
+          }
+
+          wrapper = el;
         }}
-        onMoveEnd={(e: FlickingEvent): void =>
-          highlightObserver.trigger(props.menus[e.index])
-        }
-        overflow={false}
-        hanger={"0"}
-        anchor={"0"}
-        collectStatistics={false}
-        autoResize={true}
       >
-        {props.menus.reverse().map((menu, index) => (
-          <Menu
-            key={`menu.${index}`}
-            menu={menu}
-            observable={highlightObserver}
-          />
-        ))}
-      </Flicking>
-    </Wrapper>
+        <Flicking
+          duration={500}
+          gap={10}
+          ref={(e: Flicking): void => {
+            flicking = e;
+            highlightObserver.trigger(props.menus[0]);
+          }}
+          onMoveEnd={(e: FlickingEvent): void =>
+            highlightObserver.trigger(props.menus[e.index])
+          }
+          overflow={false}
+          hanger={"0"}
+          anchor={"0"}
+          collectStatistics={false}
+          autoResize={true}
+        >
+          {props.menus.map((menu, index) => (
+            <Menu
+              key={`menu.${index}`}
+              menu={menu}
+              observable={highlightObserver}
+            />
+          ))}
+        </Flicking>
+      </Wrapper>
+    </WW>
   );
 }

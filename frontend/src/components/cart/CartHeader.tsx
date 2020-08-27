@@ -2,6 +2,7 @@ import React from "react";
 import style from "styled-components";
 
 import { CheckBox } from "../common";
+import { CartContext } from "../../contexts";
 
 const HeaderWrapper = style.div`
   width: 100%;
@@ -20,28 +21,37 @@ const ToggleTitle = style.p`
   margin-left: 5px;
 `;
 
-type Props = {
-  isAllChecked: boolean;
-  onCheck: () => void;
-};
+const CartHeader = (): JSX.Element => {
+  const cartData = CartContext.useCartState();
+  const { isAllChecked } = cartData;
 
-const CartHeader = (props: Props): JSX.Element => {
-  const { isAllChecked, onCheck } = props;
+  const cartDispatch = CartContext.useCartDispatch();
+
+  const onAllCheck = (): void => {
+    cartDispatch({
+      type: "ALL_CHECK_CART_ITEM",
+    });
+  };
+
+  const onRemoveCheckedItem = (): void => {
+    cartDispatch({
+      type: "REMOVE_CHECKED_CART",
+    });
+  };
 
   return (
     <HeaderWrapper>
-      <ToggleCheck onClick={onCheck}>
+      <ToggleCheck onClick={onAllCheck}>
         <CheckBox isChecked={isAllChecked} />
         <ToggleTitle>{isAllChecked ? "선택 해제" : "모두 선택"}</ToggleTitle>
       </ToggleCheck>
-      <p>선택 비우기</p>
+      <p onClick={onRemoveCheckedItem}>선택 비우기</p>
     </HeaderWrapper>
   );
 };
 
 CartHeader.defaultProps = {
   isAllChecked: false,
-  onCheck: null,
 };
 
 export default CartHeader;

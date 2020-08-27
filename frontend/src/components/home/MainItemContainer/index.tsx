@@ -3,9 +3,11 @@ import styled from "styled-components";
 
 import ChangeItemsButton from "./ChangeItemsButton";
 import MainItem from "../MainItem";
+import { ItemType } from "../../../types/ItemType";
 
 const Wrapper = styled.div`
   padding: 25px 15px;
+  height: 450px;
 `;
 
 const Goods = styled.div`
@@ -14,17 +16,20 @@ const Goods = styled.div`
   justify-content: space-between;
 `;
 
-type Data = {
-  goodId?: string | number;
-  title: string;
-  price: string;
-  sale?: string;
-  src: string;
-  width?: string;
-};
+type Data =
+  | {
+      goodId?: string | number;
+      title: string;
+      price: string;
+      sale?: string;
+      src: string;
+      width?: string;
+    }
+  | ItemType;
+
 type Props = {
   width?: string;
-  data: Array<Data>;
+  data?: Array<ItemType>;
   children: string;
 };
 
@@ -36,11 +41,11 @@ const convertDataToMainItem = (data: Data, idx: number): JSX.Element => (
 
 const next = (
   idx: number,
-  dataLength: number,
-  stateFunction: React.Dispatch<React.SetStateAction<number>>
+  dataLength?: number,
+  stateFunction?: React.Dispatch<React.SetStateAction<number>>
 ): void => {
-  const nextIdx = (idx + 1) * 6 >= dataLength ? 0 : idx + 1;
-  stateFunction(nextIdx);
+  const nextIdx = (idx + 1) * 6 >= (dataLength || 0) ? 0 : idx + 1;
+  stateFunction !== undefined && stateFunction(nextIdx);
 };
 
 export default function MainItemContainer({
@@ -48,16 +53,16 @@ export default function MainItemContainer({
   data,
   children: title,
 }: Props): JSX.Element {
-  const dataLength = data.length;
+  const dataLength = data?.length;
   const [idx, setIdx] = useState(0);
-  const displayedData = data.slice(idx * 6, (idx + 1) * 6);
+  const displayedData = data?.slice(idx * 6, (idx + 1) * 6);
 
   return (
     <div>
       <Wrapper>
         <h2>{title}</h2>
         <Goods>
-          {displayedData.map((oneData: Data, idx: number) =>
+          {displayedData?.map((oneData: ItemType, idx: number) =>
             convertDataToMainItem({ ...oneData, width }, idx)
           )}
         </Goods>
@@ -65,7 +70,7 @@ export default function MainItemContainer({
       <ChangeItemsButton
         onClick={(): void => next(idx, dataLength, setIdx)}
         index={idx}
-        lastIdx={dataLength / 6}
+        lastIdx={(dataLength || 0) / 6}
       >
         {title}
       </ChangeItemsButton>

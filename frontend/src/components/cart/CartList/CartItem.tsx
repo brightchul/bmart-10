@@ -1,9 +1,13 @@
 import React from "react";
 import style from "styled-components";
+import { useHistory } from "react-router-dom";
 
+import { imgURL } from "../../../utils/func";
 import { COLOR } from "../../../constants/style";
 import { CheckBox } from "../../common";
 import { CartItemType } from "../../../types/Cart";
+
+import { CartContext } from "../../../contexts";
 
 const ItemWrapper = style.div`
   width: 100%;
@@ -94,34 +98,69 @@ const CounterButton = style.button`
 
 type Props = {
   data: CartItemType;
-  onCheck: (id: number) => void;
-  onIncrease: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: number
-  ) => void;
-  onDecrease: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: number
-  ) => void;
 };
 
 const CartItem = (props: Props): JSX.Element => {
-  const { data, onCheck, onIncrease, onDecrease } = props;
-  const { id, name, cost, discount, cnt, imageUrl, isChecked } = data;
+  const history = useHistory();
+  const { data } = props;
+  const { id, title, cost, discount, amount, imageUrl, checked } = data;
   const salePrice = cost - Math.round(cost * (discount * 0.01));
+
+  const cartDispatch = CartContext.useCartDispatch();
+
+  const onCheckItem = (): void => {
+    cartDispatch({
+      type: "CHECK_CART_ITEM",
+      payload: {
+        id,
+        checked: !checked,
+      },
+    });
+  };
+
+  const onDecrease = (): void => {
+    const count = amount < 2 ? 1 : amount - 1;
+    cartDispatch({
+      type: "UPDATE_CART",
+      payload: {
+        id,
+        amount: count,
+      },
+    });
+  };
+
+  const onIncrease = (): void => {
+    const count = amount < 10 ? amount + 1 : 10;
+    cartDispatch({
+      type: "UPDATE_CART",
+      payload: {
+        id,
+        amount: count,
+      },
+    });
+  };
+
+  const onRemove = (): void => {
+    cartDispatch({
+      type: "REMOVE_CART",
+      payload: {
+        id,
+      },
+    });
+  };
 
   return (
     <ItemWrapper>
       <TitleWrapper>
-        <CheckBoxWrapper onClick={(): void => onCheck(id)}>
-          <CheckBox isChecked={isChecked} />
-          <p>{name}</p>
+        <CheckBoxWrapper onClick={onCheckItem}>
+          <CheckBox isChecked={checked} />
+          <p>{title}</p>
         </CheckBoxWrapper>
-        <DeleteBtn>삭제</DeleteBtn>
+        <DeleteBtn onClick={onRemove}>삭제</DeleteBtn>
       </TitleWrapper>
       <ContentWrapper>
-        <ImgWrapper>
-          <img src={imageUrl} />
+        <ImgWrapper onClick={(): void => history.push(`/goods/${id}`)}>
+          <img src={imgURL(imageUrl)} />
         </ImgWrapper>
         <PriceWrapper>
           <div>
@@ -137,20 +176,15 @@ const CartItem = (props: Props): JSX.Element => {
           </div>
           <ChangeCounter>
             <CounterButton
-              name="minus"
-              style={{ color: cnt === 1 ? COLOR.GREY_3 : COLOR.BLACK }}
-              onClick={(
-                e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-              ): void => onDecrease(e, id)}
+              style={{ color: amount === 1 ? COLOR.GREY_3 : COLOR.BLACK }}
+              onClick={onDecrease}
             >
               ㅡ
             </CounterButton>
-            <CounterItem>{cnt}</CounterItem>
+            <CounterItem>{amount}</CounterItem>
             <CounterButton
-              name="plus"
-              onClick={(
-                e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-              ): void => onIncrease(e, id)}
+              style={{ color: amount === 10 ? COLOR.GREY_3 : COLOR.BLACK }}
+              onClick={onIncrease}
             >
               +
             </CounterButton>
@@ -159,14 +193,6 @@ const CartItem = (props: Props): JSX.Element => {
       </ContentWrapper>
     </ItemWrapper>
   );
-};
-
-CartItem.defaultProps = {
-  goodId: 0,
-  title: "",
-  price: 0,
-  sale: 0,
-  src: "string",
 };
 
 export default CartItem;

@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { ItemContext, ItemContextType } from "./ItemContext";
 
 type ValueType = {
-  price?: string;
-  sale?: string;
+  cost?: string;
+  discount?: string;
   saleValue?: number;
   discountedPrice?: number;
 };
 
 const DEFAULT_PRICE = "0";
-const DEFAULT_SALE = "0%";
+const DEFAULT_DISCOUNT = "0%";
 
 const MARGIN_TOP = "-5px";
 
@@ -32,8 +32,8 @@ const DiscountedPrice = styled.div`
   font-weight: 800;
 `;
 
-const getSaleValue = (sale: string): number => {
-  const saleValue = parseInt(sale);
+const getSaleValue = (discount: string): number => {
+  const saleValue = parseInt(discount);
   return Number.isNaN(saleValue) ? 0 : saleValue;
 };
 
@@ -43,29 +43,32 @@ const getDiscountPrice = (price: string, saleValue: number): number => {
 };
 
 const getValues = ({
-  price = DEFAULT_PRICE,
-  sale = DEFAULT_SALE,
+  cost = DEFAULT_PRICE,
+  discount = DEFAULT_DISCOUNT,
 }: ItemContextType): ValueType => {
-  const saleValue: number = getSaleValue(sale);
-  const discountedPrice = getDiscountPrice(price, saleValue);
+  const saleValue: number = getSaleValue(discount);
+  const discountedPrice = getDiscountPrice(cost, saleValue);
 
-  return { price, sale, saleValue, discountedPrice };
+  return { cost, discount, saleValue, discountedPrice };
 };
 
 export default function ItemPrice(): JSX.Element {
-  const { price, sale, saleValue = 0, discountedPrice }: ValueType = getValues(
-    useContext(ItemContext)
-  );
+  const {
+    cost,
+    discount,
+    saleValue = 0,
+    discountedPrice,
+  }: ValueType = getValues(useContext(ItemContext));
 
   return (
     <div>
       {saleValue > 0 && (
         <div style={{ marginTop: MARGIN_TOP }}>
-          <Sale>{sale}</Sale>
-          <Price>{price}원</Price>
+          <Sale>{discount}%</Sale>
+          <Price>{cost?.toLocaleString()}원</Price>
         </div>
       )}
-      <DiscountedPrice>{discountedPrice}원</DiscountedPrice>
+      <DiscountedPrice>{discountedPrice?.toLocaleString()}원</DiscountedPrice>
     </div>
   );
 }

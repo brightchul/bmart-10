@@ -3,6 +3,7 @@ import DAO from "./data-access-object";
 import poolOption from "./pool-option";
 import { Query } from "../util/query";
 
+const SEARCH_SUB_CATEGORY_INFO_NO = `SELECT no, name FROM sub_category WHERE no = ? `;
 const SEARCH_SUB_CATEGORY_INFO = `SELECT no, name FROM sub_category WHERE name = ? `;
 const SEARCH_SUB_CATEGORY_NAME_LIST = `SELECT name, sub_category_array as data FROM main_category WHERE name = ? `;
 const SEARCH_SUB_CATEGORY_NAME = `SELECT name FROM sub_category where no=?`;
@@ -40,40 +41,55 @@ class CategoryDAO extends DAO {
     super(option);
   }
 
-  async getOneInfo(query: string, params: Array<string>): Promise<any> {
+  async getOneInfo<T>(
+    query: string,
+    params: Array<string>
+  ): Promise<T | undefined> {
     const connection = await this.getConnection();
     const rows = await connection.execute<RowDataPacket[]>(query, params);
-    let result = rows[0][0];
+    connection.release();
+
+    let result: T | undefined = undefined;
 
     // 그냥 반환하면 RowDataPacket[] 타입이 되기 때문에 해당 타입을 일반 배열, 객체로 변경해준다.
-    if (result !== undefined) {
-      result = JSON.parse(JSON.stringify(result));
+    if (rows[0][0] !== undefined) {
+      result = JSON.parse(JSON.stringify(rows[0][0]));
     }
     return result;
   }
-  async getInfo(query: string, params: Array<string>): Promise<any> {
+  async getInfo<T>(query: string, params: Array<string>): Promise<Array<T>> {
     const connection = await this.getConnection();
     const rows = await connection.execute<RowDataPacket[]>(query, params);
-    let result = rows[0];
+    connection.release();
+
+    let result: Array<T> = [];
 
     // 그냥 반환하면 RowDataPacket[] 타입이 되기 때문에 해당 타입을 일반 배열, 객체로 변경해준다.
-    if (result !== undefined) {
-      result = JSON.parse(JSON.stringify(result));
+    if (rows[0] !== undefined) {
+      result = JSON.parse(JSON.stringify(rows[0]));
     }
     return result;
   }
   async getSubCategoryNameList(
     mainName: string
   ): Promise<SubCategoryNameList | undefined> {
-    const result = await this.getOneInfo(SEARCH_SUB_CATEGORY_NAME_LIST, [
-      mainName,
-    ]);
+    const result = await this.getOneInfo<SubCategoryNameList>(
+      SEARCH_SUB_CATEGORY_NAME_LIST,
+      [mainName]
+    );
     return result;
   }
   async getSubCategoryInfo(name: string): Promise<SubCategoryInfo> {
-    const result: SubCategoryInfo = await this.getOneInfo(
+    const result: SubCategoryInfo = await this.getOneInfo<SubCategoryInfo>(
       SEARCH_SUB_CATEGORY_INFO,
       [name]
+    );
+    return result;
+  }
+  async getSubCategoryInfoByNo(no: string): Promise<SubCategoryInfo> {
+    const result: SubCategoryInfo = await this.getOneInfo<SubCategoryInfo>(
+      SEARCH_SUB_CATEGORY_INFO_NO,
+      [no]
     );
     return result;
   }
@@ -92,7 +108,10 @@ class CategoryDAO extends DAO {
     return result;
   }
   async getSubCategoryName(subNo: string) {
-    const result = await this.getOneInfo(SEARCH_SUB_CATEGORY_NAME, [subNo]);
+    const result = await this.getOneInfo<{ name: string }>(
+      SEARCH_SUB_CATEGORY_NAME,
+      [subNo]
+    );
     return result?.name;
   }
   async getGoodsInSubCategory(

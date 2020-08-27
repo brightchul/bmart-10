@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { ItemContext, ItemContextType } from "./ItemContext";
+import { imgURL } from "../../../utils/func";
 
 type Style = {
   width?: string;
@@ -49,22 +50,32 @@ const getHeight = (width: string): string => {
   }
 };
 
-const getStyle = ({ src, width = DEFAULT_WIDTH }: ItemContextType): Style => {
+const getStyle = ({
+  imageUrl,
+  width = DEFAULT_WIDTH,
+}: ItemContextType): Style => {
   const height = getHeight(width);
   return {
     height,
-    backgroundImage: `url(${src})`,
+    backgroundImage: `url(${imgURL(imageUrl)})`,
     backgroundSize: BACKGROUND_SIZE,
   };
 };
 
 export default function ItemImg(): JSX.Element {
   const style = getStyle(useContext(ItemContext));
-
+  const [isClicked, setIsClicked] = useState(false);
   return (
     <ItemImage style={style}>
-      <HeartArea>
-        <Heart>♡</Heart>
+      <HeartArea
+        onClick={(
+          event: React.MouseEvent<HTMLDivElement, MouseEvent>
+        ): void => {
+          event.stopPropagation();
+          setIsClicked(!isClicked);
+        }}
+      >
+        <Heart style={{ color: isClicked ? "red" : "white" }}>♥</Heart>
       </HeartArea>
     </ItemImage>
   );

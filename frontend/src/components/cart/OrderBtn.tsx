@@ -1,6 +1,9 @@
 import React from "react";
 import style from "styled-components";
+import { useHistory } from "react-router-dom";
 import { COLOR } from "../../constants/style";
+import { CartContext, PopUpContext } from "../../contexts";
+import { MESSAGE } from "../../constants/message";
 
 const BtnWrapper = style.div`
   width: 100%;
@@ -11,6 +14,7 @@ const BtnWrapper = style.div`
 
 const Btn = style.button`
   width: 100%;
+  min-height: 47px;
   border: 1px solid ${COLOR.GREEN_1};
   background: ${COLOR.GREEN_1};
   padding: 10px;
@@ -40,28 +44,66 @@ const Price = style.div`
   color: ${COLOR.WHITE};
 `;
 
-type Props = {
-  orderAction: () => void;
-  totalPrice: number;
-  count: number;
-};
+const OrderBtn = (): JSX.Element => {
+  const cartData = CartContext.useCartState();
+  const { totalPrice, checkItemAmount } = cartData;
 
-const OrderBtn = (props: Props): JSX.Element => {
-  const { orderAction, totalPrice, count } = props;
+  const history = useHistory();
+  const popupDispatch = PopUpContext.usePopUpDispatch();
+
+  const goLoginPage = (): void => {
+    popupDispatch({ type: "POPUP_CLOSE" });
+    history.push("/login");
+  };
+
+  const orderAction = (): void => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // 최소 금액 확인
+      if (totalPrice < 5000) {
+        popupDispatch({
+          type: "POPUP_OPEN",
+          payload: {
+            content: "최소금액을 맞춰주세요.",
+            confirmAction: (): void => popupDispatch({ type: "POPUP_CLOSE" }),
+          },
+        });
+        return;
+      }
+      // 구매하기
+      popupDispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: "개발중입니다..",
+          confirmAction: (): void => popupDispatch({ type: "POPUP_CLOSE" }),
+        },
+      });
+    } else {
+      // 로그인 페이지로 유도
+      popupDispatch({
+        type: "POPUP_OPEN",
+        payload: {
+          content: MESSAGE.LOGIN_INDUCE,
+          confirmAction: goLoginPage,
+        },
+      });
+    }
+  };
 
   return (
     <BtnWrapper>
       <Btn onClick={orderAction}>
-        <Count>{count}</Count>
-        <Price>{totalPrice}원 배달 주문하기</Price>
+        {totalPrice >= 5000 ? (
+          <>
+            <Count>{checkItemAmount >= 100 ? 99 : checkItemAmount}</Count>
+            <Price>{totalPrice.toLocaleString()}원 배달 주문하기</Price>
+          </>
+        ) : (
+          <Price>최소 금액을 맞춰주세요.</Price>
+        )}
       </Btn>
     </BtnWrapper>
   );
-};
-
-OrderBtn.defaultProps = {
-  totalPrice: 0,
-  count: 0,
 };
 
 export default OrderBtn;

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import MainItem from "../home/MainItem";
+import { ItemType } from "../../types/ItemType";
+
 const Container = styled.div`
   width: 100%;
   padding: 15px;
@@ -77,12 +79,12 @@ const sortTypeArr: Array<SortType> = [
   {
     title: "금액 높은순",
     sortLogic: (a: ItemType, b: ItemType): number =>
-      parseInt(b.price) - parseInt(a.price),
+      parseInt(b.cost) - parseInt(a.cost),
   },
   {
     title: "금액 낮은순",
     sortLogic: (a: ItemType, b: ItemType): number =>
-      parseInt(a.price) - parseInt(b.price),
+      parseInt(a.cost) - parseInt(b.cost),
   },
   {
     title: "신규 상품순",
@@ -92,23 +94,18 @@ const sortTypeArr: Array<SortType> = [
   {
     title: "할인율 순",
     sortLogic: (a: ItemType, b: ItemType): number =>
-      parseInt(b.sale) - parseInt(a.sale),
+      parseInt(b.discount) - parseInt(a.discount),
   },
 ];
 
-type ItemType = {
-  title: string;
-  price: string;
-  sale: string;
-  src: string;
-};
-
 export default function ItemList({
-  data,
+  data = [],
 }: {
-  data: Array<ItemType>;
+  data: Array<ItemType> | undefined;
 }): JSX.Element {
+  if (data === undefined || data.length === 0) return <div></div>;
   const [sortState, setSortState] = useState({ y: "100%", sortIdx: 0, data });
+  sortState.data = data;
 
   return (
     <div style={{ height: "100%" }}>
@@ -129,9 +126,9 @@ export default function ItemList({
 
         <Wrapper>
           {sortState.data.map(
-            (one: ItemType, idx: number): JSX.Element => (
-              <MainItem key={idx + ""} width="48%" {...one}></MainItem>
-            )
+            (one: ItemType, idx: number): JSX.Element => {
+              return <MainItem key={idx + ""} width="48%" {...one}></MainItem>;
+            }
           )}
         </Wrapper>
       </Container>
