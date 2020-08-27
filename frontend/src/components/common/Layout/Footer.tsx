@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 import Svg from "../Svg";
 
-import { COLOR, SVG } from "../../../constants/style";
+import { COLOR, SVG_ICON } from "../../../constants/style";
 import { FOOTER } from "../../../constants/layout";
 
 import * as ROUTES from "../../../constants/routes";
@@ -49,22 +49,22 @@ const navList = [
   {
     path: ROUTES.HOME.path,
     name: ROUTES.HOME.title,
-    svg: SVG.HOME,
+    svg: SVG_ICON.HOME,
   },
   {
     path: ROUTES.SEARCH.path,
     name: ROUTES.SEARCH.title,
-    svg: SVG.SEARCH,
+    svg: SVG_ICON.SEARCH,
   },
   {
     path: ROUTES.CART.path,
     name: ROUTES.CART.title,
-    svg: SVG.CART,
+    svg: SVG_ICON.CART,
   },
   {
     path: ROUTES.MENU.path,
     name: ROUTES.MENU.title,
-    svg: SVG.MENU,
+    svg: SVG_ICON.MENU,
   },
 ];
 

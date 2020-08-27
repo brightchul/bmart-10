@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import { COLOR, SVG } from "../../../constants/style";
-import { HEADER } from "../../../constants/layout";
-// import Logo from '/asset/';
 import { useHistory } from "react-router-dom";
+
+import { COLOR, SVG_ICON } from "../../../constants/style";
+import { HEADER } from "../../../constants/layout";
+import SVG from "../Svg";
 import { fetchGet } from "../../../fetch";
+import { format } from "util";
 
 type CategoryType = {
   mainCategory: string;
@@ -37,6 +38,8 @@ const Title = styled.h2`
 `;
 
 const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
+  const token = localStorage.getItem("token");
+  const userIcon = token ? "logout" : "login";
   const [categoryName, setCategoryName] = useState(mainCategory || "");
   useEffect(() => {
     if (subCategory) {
@@ -47,13 +50,22 @@ const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
     return (): void => setCategoryName(mainCategory);
   }, [mainCategory, subCategory]);
   const history = useHistory();
+  const goLogin = (): void => {
+    history.push("/login");
+  };
+  const goLogout = (): void => {
+    localStorage.removeItem("token");
+    history.push("/");
+  };
   return (
     <Layer>
-      <Item onClick={(): void => history.goBack()}>
-        <svg width={36} height="36px">
-          <path fill={COLOR.WHITE} d={SVG.ARROW_BACK} />
-        </svg>
-      </Item>
+      {history.location.pathname !== "/" ? (
+        <Item onClick={(): void => history.goBack()}>
+          <SVG size={36} fill={COLOR.WHITE} path={SVG_ICON.ARROW_BACK} />
+        </Item>
+      ) : (
+        <Item></Item>
+      )}
       <div>
         {categoryName ? (
           <Title>{categoryName}</Title>
@@ -61,7 +73,9 @@ const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
           <img src="/asset/images/logo.png" width={"60px"} />
         )}
       </div>
-      <Item></Item>
+      <Item onClick={userIcon === "login" ? goLogin : goLogout}>
+        <img src={`/asset/icon/${userIcon}.svg`} width={"32px"} />
+      </Item>
     </Layer>
   );
 };
