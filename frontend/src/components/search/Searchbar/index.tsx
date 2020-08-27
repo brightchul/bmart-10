@@ -52,7 +52,7 @@ export default function SearchBar(): JSX.Element {
     dispatch({ type: "SET_HISTORY", history: histories });
   }, []);
 
-  function updateFilter(event: React.KeyboardEvent<HTMLInputElement>): void {
+  function updateFilter(): void {
     const filter = state.input.value;
 
     setQuery(filter);

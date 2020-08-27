@@ -110,7 +110,7 @@ const Register = (): JSX.Element => {
     setUser((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
 
-  const openPopUp = (message: string) => {
+  const openPopUp = (message: string): void => {
     popupDispatch({
       type: "POPUP_OPEN",
       payload: {

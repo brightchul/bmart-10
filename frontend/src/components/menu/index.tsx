@@ -62,7 +62,7 @@ function groupByTwo(list: Category[]): GroupCategory[] {
 export default function Menu(): JSX.Element {
   const observerCloseAll = {
     callbacks: new Array<Function>(),
-    trigger: function () {
+    trigger: function (): void {
       this.callbacks.forEach((callback) => {
         callback(false);
       });
