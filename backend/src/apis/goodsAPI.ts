@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { APIResponse } from "../types/APIResponse";
 
 import goodsDAO from "../daos/goods.dao";
+import { parseRequestQueryToInt } from "../util/util";
 
 const router = Router();
 
@@ -93,6 +94,48 @@ router.get("/id/:goodId", async (request: Request, response: Response) => {
   apiResponse.success = true;
   apiResponse.data = { ...result[0] };
 
+  response.status(200).send(apiResponse);
+});
+
+/**
+ * @api {get} /api/goods/new 새로운 상품 리스트 반환
+ * @apiName new GoodsInfo list
+ * @apiGroup Goods
+ * @apiQuery startIdx {number} 시작 인덱스 번호
+ * @apiQuery offset {number} 개수
+ *
+ * @apiSuccess {Boolean} success API 성공 여부
+ * @apiSuccess {Object} data 새로운 상품들의 상품 리스트
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "data" : [
+ *           {"goodId": number, "title": string, "price": string, "sale": string, "src": string}
+ *       ]
+ *     }
+ *
+ * @apiError NotFound
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "success": false,
+ *     }
+ */
+router.get("/new", async (request: Request, response: Response) => {
+  const startIdx = parseRequestQueryToInt(request.query.startIdx as string);
+  const offset = parseRequestQueryToInt(request.query.offset as string);
+
+  const apiResponse: APIResponse = {
+    success: false,
+  };
+
+  const result = await goodsDAO.getNewGoods({ startIdx, offset });
+
+  apiResponse.success = true;
+  apiResponse.data = result;
   response.status(200).send(apiResponse);
 });
 

@@ -3,6 +3,7 @@ import DAO from "./data-access-object";
 import poolOption from "./pool-option";
 
 import { Goods } from "../types/dto/goods.dto";
+import { Query } from "../util/query";
 
 const CREATE_GOODS = `INSERT INTO goods (title, category_name, cost, discount, amount, image_url) VALUES (?, ?, ?, ?, ?, ?)`;
 const SEARCH_QUERY = `SELECT * FROM \`goods\` WHERE \`title\` LIKE (?)`;
@@ -17,6 +18,9 @@ const SEARCH_MAIN_CATEGORY_GOODS = `
   WHERE delete_flag = 0 AND category_name IN `;
 
 const ORDER_BY_RANDOM = `ORDER BY RAND() LIMIT 4`;
+
+const SELECT_NEW_GOODS = `select * from goods where delete_flag = 0 order by created_at desc`;
+const SELECT_POPULAR_GOODS = `select * from goods where delete_flag = 0 order by order_cnt desc`;
 
 type Row = {
   good_id: number;
@@ -164,6 +168,31 @@ class GoodsDAO extends DAO {
       SELECT_GOODS,
       goodId
     )) as RowDataPacket[];
+    return result;
+  }
+  async getInfo<T>(query: string, params: Array<string>): Promise<Array<T>> {
+    const connection = await this.getConnection();
+    const rows = await connection.execute<RowDataPacket[]>(query, params);
+    connection.release();
+
+    let result: Array<T> = [];
+
+    if (rows[0] !== undefined) {
+      result = JSON.parse(JSON.stringify(rows[0]));
+    }
+    return result;
+  }
+  async getNewGoods({
+    startIdx,
+    offset,
+  }: {
+    startIdx?: number;
+    offset?: number;
+  }) {
+    const result = await this.getInfo(
+      Query.of(SELECT_NEW_GOODS).limit(startIdx, offset).build(),
+      []
+    );
     return result;
   }
 }
