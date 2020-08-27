@@ -19,10 +19,7 @@ const CartList = (props: Props): JSX.Element => {
   return (
     <ListWrapper>
       {data.map((item, index) => (
-        <CartItem
-          key={index + item.name}
-          data={item}
-        />
+        <CartItem key={index + item.title} data={item} />
       ))}
     </ListWrapper>
   );
