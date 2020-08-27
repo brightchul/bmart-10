@@ -2,7 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 import { getHistory, deleteHistoryByIndex } from "../../../utils/localstorage";
-import { useSearchDispatch } from "../../../contexts/SearchContext";
+import {
+  useSearchDispatch,
+  useSearchState,
+} from "../../../contexts/SearchContext";
 
 import getGoodsByName from "../../../fetch/goods/getGoodsByName";
 
@@ -52,6 +55,7 @@ function trimText(text: string | undefined): string {
 
 export default function SearchBar(props: Props): JSX.Element {
   const dispatch = useSearchDispatch();
+  const state = useSearchState();
 
   return (
     <Wrapper>
@@ -59,9 +63,9 @@ export default function SearchBar(props: Props): JSX.Element {
         onClick={() => {
           const query: string = props.children || "";
 
-          history.pushState({}, "", `?query=${query}`);
-
+          state.input.value = query;
           dispatch({ type: "SET_SHOW_HISTORY", showHistory: false });
+          dispatch({ type: "SHOW_DELETE_BUTTON", value: true });
 
           getGoodsByName(query).then((res) => {
             if (res.success) {

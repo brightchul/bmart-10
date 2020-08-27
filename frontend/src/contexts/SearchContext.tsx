@@ -6,12 +6,16 @@ type State = {
   searchResult: Good[];
   showHistory: boolean;
   history: string[];
+  input: HTMLInputElement;
+  showDelete: boolean;
 };
 
 type Action =
+  | { type: "SET_INPUT"; input: HTMLInputElement }
   | { type: "SET_GOODS"; goods: Good[] }
   | { type: "SET_SHOW_HISTORY"; showHistory: boolean }
-  | { type: "SET_HISTORY"; history: string[] };
+  | { type: "SET_HISTORY"; history: string[] }
+  | { type: "SHOW_DELETE_BUTTON"; value: boolean };
 
 type SampleDispatch = Dispatch<Action>;
 
@@ -20,6 +24,17 @@ const DispatchContext = createContext<SampleDispatch | null>(null);
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case "SET_INPUT":
+      return {
+        ...state,
+        input: action.input,
+      };
+    case "SHOW_DELETE_BUTTON": {
+      return {
+        ...state,
+        showDelete: action.value,
+      };
+    }
     case "SET_GOODS":
       return {
         ...state,
@@ -49,6 +64,8 @@ export function SearchProvider({
     showHistory: false,
     searchResult: [],
     history: [],
+    input: document.createElement("input"),
+    showDelete: false,
   });
 
   return (
