@@ -61,8 +61,16 @@ export const MESSAGE = {
     "장바구니에 상품을 담았습니다. \n 장바구니 페이지로 이동하시겠습니까?",
   USER_LOGIN_ERROR: "로그인에 실패하였습니다. \n 다시 시도해주세요.",
   USER_EMAIL_EMPTY: "이메일을 입력해주세요.",
+  USER_NAME_EMPTY: "이름을 입력해주세요.",
   USER_PASSWORD_EMPTY: "비밀번호를 입력해주세요.",
-  USER_EMAIL_EXIST: "입력하신 이메일은 존재하는 이메일입니다. \n 다른 이메일을 입력해 주세요.",
+  USER_PASSWORD_CHECK_EMPTY: "비밀번호 확인을 입력해주세요.",
+  USER_PASSWORD_CHECK_CORRECT:
+    "비밀번호가 맞지 않습니다. \n 다시 입력해주세요.",
+  USER_PASSWORD_LENGTH: "비밀번호는 8자리 이상 입력해주세요.",
+  USER_EMAIL_EXIST:
+    "입력하신 이메일은 존재하는 이메일입니다. \n 다른 이메일을 입력해 주세요.",
+  USER_REGISTER_SUCCESS:
+    "회원가입이 완료되었습니다. \n 로그인 페이지로 이동합니다.",
 };
 
 type CategoryTitleName = { name: string; title: string };
