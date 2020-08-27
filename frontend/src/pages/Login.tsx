@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { COLOR } from "../constants/style";
 import { MESSAGE } from "../constants/message";
 
-import { getToken, emailCheck } from "../fetch/user";
+import { getToken } from "../fetch/user";
 import { PopUpContext } from "../contexts";
 
 const Wrapper = styled.div`
