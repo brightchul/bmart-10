@@ -10,7 +10,7 @@ type Style = {
   backgroundSize: string;
 };
 
-const DEFAULT_WIDTH = "107px"; // 값이 들어오지 않았을대의 기본값
+const DEFAULT_WIDTH = "30vw"; // 값이 들어오지 않았을대의 기본값
 const BACKGROUND_SIZE = "cover";
 
 const ItemImage = styled.div`

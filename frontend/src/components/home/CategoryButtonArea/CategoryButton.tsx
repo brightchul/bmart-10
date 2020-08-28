@@ -46,7 +46,7 @@ const ButtonImg = styled.img`
 const ButtonTitle = styled.p`
   margin-top: 5px;
   font-size: 0.7em;
-  word-break: keep-all;
+  word-break: break-all;
 `;
 
 function CategoryButton({

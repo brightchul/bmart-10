@@ -145,7 +145,7 @@ export default function Home(): JSX.Element {
         <HorizontalSlider title={"고객님을 위해 준비한 상품"}>
           {(livingList?.slice(5, 20) || []).map(
             (item: ItemType, idx: number) => (
-              <MainItem key={idx + ""} {...item} />
+              <MainItem fontSize="0.8em" key={idx + ""} {...item} />
             )
           )}
         </HorizontalSlider>
@@ -153,12 +153,12 @@ export default function Home(): JSX.Element {
         <MainItemContainer data={foodList}>지금 뭐 먹지?</MainItemContainer>
         <HorizontalSlider title={"새로 나왔어요"} isMore>
           {(newList || []).map((item: Data, idx: number) => (
-            <MainItem key={idx + ""} {...item} />
+            <MainItem fontSize="0.8em" key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
         <HorizontalSlider title={"요즘 잘 팔려요"} isMore>
           {(popularList || []).map((item: Data, idx: number) => (
-            <MainItem key={idx + ""} {...item} />
+            <MainItem fontSize="12px" key={idx + ""} {...item} />
           ))}
         </HorizontalSlider>
         <MainItemContainer data={livingList}>
