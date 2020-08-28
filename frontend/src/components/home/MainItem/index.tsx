@@ -5,7 +5,7 @@ import ItemContent from "./ItemContent";
 import { ItemContext, ItemContextType } from "./ItemContext";
 import { useHistory } from "react-router-dom";
 
-const DEFAULT_WIDTH = "107px";
+const DEFAULT_WIDTH = "28vw";
 const wordBreak = "keep-all";
 
 const ItemArea = styled.div`
