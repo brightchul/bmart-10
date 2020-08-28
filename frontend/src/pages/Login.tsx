@@ -54,12 +54,19 @@ const Button = styled.button`
 const Bottom = styled.div`
   width: 100%;
   margin-top: 70px;
-  text-align: center;
-  color: ${COLOR.GREEN_1};
-  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
-  > p {
+  > button {
     margin-bottom: 10px;
+    border: 0;
+    background-color: transparent;
+    padding: 5px;
+    color: ${COLOR.GREEN_1};
+    font-weight: 600;
+    font-size: 1rem;
   }
 `;
 
@@ -109,6 +116,7 @@ const Login = (): JSX.Element => {
     getToken(user).then((res) => {
       if (res.success) {
         // TODO: 사용자 정보 저장?
+        localStorage.setItem("name", res.data.name);
         localStorage.setItem("token", res.data.token);
         history.push("/");
       } else {
@@ -131,8 +139,8 @@ const Login = (): JSX.Element => {
     history.push("/register");
   };
 
-  const goBack = (): void => {
-    history.goBack();
+  const goMain = (): void => {
+    history.push("/");
   };
 
   return (
@@ -157,8 +165,8 @@ const Login = (): JSX.Element => {
         <Button onClick={loginActions}>로그인</Button>
       </Form>
       <Bottom>
-        <p onClick={goRegister}>회원가입</p>
-        <p onClick={goBack}>이전 페이지로</p>
+        <button onClick={goRegister}>회원가입</button>
+        <button onClick={goMain}>메인으로</button>
       </Bottom>
     </Wrapper>
   );

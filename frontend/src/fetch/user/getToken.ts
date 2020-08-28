@@ -8,6 +8,7 @@ export type APIResponse =
       success: true;
       data: {
         token: string;
+        name: string;
       };
     };
 
