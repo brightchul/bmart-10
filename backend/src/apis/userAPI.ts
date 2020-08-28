@@ -12,7 +12,9 @@ const router = Router();
  * @apiName UserSignup
  * @apiGroup User
  *
- * @apiParam {String} email name password
+ * @apiParam {String} email
+ * @apiParam {String} name
+ * @apiParam {String} password
  *
  * @apiSuccess {Boolean} success API 성공 여부
  *
@@ -154,10 +156,7 @@ router.get("/email/:email", async (request: Request, response: Response) => {
  *     {
  *       "email":
  *       "name":
- *       "type":
- *       "deleteFlag":
- *       "vipFlag":
- *       "wishArray":
+ *       "token":
  *     }
  *
  * @apiError Unauthorized
