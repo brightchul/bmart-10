@@ -19,11 +19,14 @@
 ![Slack](https://img.shields.io/badge/-Slack-4A154B?&logo=Slack&logoColor=white)
 ![GoogleDocs](https://img.shields.io/badge/-google%20docs-blue)
 
-![main](https://user-images.githubusercontent.com/38618187/90328852-ca698900-dfda-11ea-9eb6-94463bb9770f.gif)
+
+<img src="https://user-images.githubusercontent.com/36844660/91460356-af442680-e8c2-11ea-83e7-3b764cfab647.gif" alt='main' width="300">
 
 B마트보다 조금 더 나은 마트! B+ 마트 입니다.
 
 ## [B+마트로 이동하기 🚴🏻‍♀️🚴🏻🚴🏻‍♂️](http://15.164.218.119/)
+
+## [B+마트 데모 영상 구경하기 👀](https://youtu.be/RsfFbSghxlo)
 
 ## 📌 프로젝트 소개
 
@@ -53,9 +56,47 @@ B마트보다 조금 더 나은 마트! B+ 마트 입니다.
 - [backlog를 이용한 프로젝트 관리](https://docs.google.com/spreadsheets/d/1gyMJOVOPhGRMWUTwD1kpeA1Ba2uewj1YoHgOcpYOZX8/edit?pli=1#gid=0)
 - [git hooks를 이용한 커밋 메시지 자동 검사](https://github.com/woowa-techcamp-2020/bmart-10/wiki/Automatic-check-of-commit-message)
 
+## 👨‍👨‍👧 우리의 기술적 도전 내용
+
+- 🙋🏻‍♀️ 슬기님의 도전
+
+        - figma 사용하여 디자인 가이드라인 구성
+        - Context API를 사용하여 전역 상태 관리
+        - typescript 사용
+
+  **ETC**
+
+        - Git Action 으로 자동배포
+        - s3 bucket 사용하여 이미지 관리
+
+- 🙋🏻 찬기님의 도전
+
+        - image lazy loading (Intersection Observer API)
+        - 땡겨요 컴포넌트 (사용자 터치 이벤트 분기처리)
+        - scroll 이벤트를 이용한 대표상품 (쓰로틀링을 이용한 최적화)
+        - context + reducer를 이용한 전역상태관리
+        - 검색 기능 + 검색 페이지
+
+  **ETC**
+
+        - Git Hooks & commitlint : 커밋메시지 자동검사
+        - Git Action 으로 자동배포
+
+- 🙋🏻 철훈님의 도전
+
+        - ContextAPI 를 활용한 상태관리
+        - react + typescript 를 활용한 함수형 컴포넌트 활용
+        - useEffect, 의존성 배열을 통한 상태 관리 및 외부 함수 호출
+        - figma를 활용한 가이드 작성
+
+  **ETC**
+
+        - 백엔드 디버깅 환경 설정
+        - 프론트 엔드 디버깅 환경 설정
+
 ## 🌈 데이터베이스 schema 구조
 
-![schema](https://user-images.githubusercontent.com/38618187/90085423-e6f39000-dd52-11ea-9377-24ef36e97964.png)
+![schema](https://user-images.githubusercontent.com/36844660/91418871-b3a21c80-e88d-11ea-8185-477a8a88fe64.png)
 
 [wiki 링크](https://github.com/woowa-techcamp-2020/bmart-10/wiki/%5B%F0%9F%93%97-DB%5D-ERD)
 
@@ -127,6 +168,8 @@ yarn start:dev # 개발용 서버 실행
     ├── types       # 타입 정의
     └── util        # 유틸성 함수들
 ```
+
+[API 문서 구경하기 👀](https://bmart-10-bucket.s3.ap-northeast-2.amazonaws.com/public/apis/doc/index.html)
 
 ## ⚙️ dotenv
 
