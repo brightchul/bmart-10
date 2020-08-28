@@ -38,7 +38,7 @@ const Content = style.div`
   flex: 2;
   display: flex;
   justify-content: center;
-  padding: 15px;
+  padding: 0 15px 15px 15px;
   white-space:pre-line;
   text-align: center;
 `;

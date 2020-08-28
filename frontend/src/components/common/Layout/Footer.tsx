@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
@@ -91,6 +91,14 @@ type Props = {
 
 const NavItem = (props: Props): JSX.Element => {
   const cartData = CartContext.useCartState();
+  const cartDispatch = CartContext.useCartDispatch();
+
+  useEffect(() => {
+    cartDispatch({
+      type: "GET_CART",
+    });
+  }, []);
+
   const { checkItemAmount } = cartData;
   const { path, name, svg } = props;
   return (

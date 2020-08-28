@@ -158,11 +158,15 @@ const reducer = (state: Cart, action: Action): Cart => {
         const removeData = state.cartList.filter(
           (cart): CartItemType | boolean => cart.id !== updateItem.id
         );
+        const amount =
+          action.payload.count + prevCount >= 10
+            ? 10
+            : action.payload.count + prevCount;
         updateCartList = [
           ...removeData,
           {
             ...updateItem,
-            amount: action.payload.count + prevCount,
+            amount,
           },
         ];
       }
