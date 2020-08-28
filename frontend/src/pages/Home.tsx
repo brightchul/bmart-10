@@ -132,6 +132,8 @@ export default function Home(): JSX.Element {
     );
   }, []);
 
+  const name = localStorage.getItem("name") || "우리 고객";
+
   return (
     <Layout>
       <div
@@ -142,7 +144,7 @@ export default function Home(): JSX.Element {
         <PullTo observable={observable} />
         <Banner advertiseData={advertiseMockData}></Banner>
         <Category></Category>
-        <HorizontalSlider title={"고객님을 위해 준비한 상품"}>
+        <HorizontalSlider title={`${name}님을 위해 준비한 상품`}>
           {(livingList?.slice(5, 20) || []).map(
             (item: ItemType, idx: number) => (
               <MainItem fontSize="0.8em" key={idx + ""} {...item} />

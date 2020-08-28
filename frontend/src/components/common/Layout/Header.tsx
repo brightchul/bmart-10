@@ -54,6 +54,7 @@ const Header = ({ mainCategory, subCategory }: CategoryType): JSX.Element => {
   };
   const goLogout = (): void => {
     localStorage.removeItem("token");
+    localStorage.removeItem("name");
     history.push("/");
   };
   return (
