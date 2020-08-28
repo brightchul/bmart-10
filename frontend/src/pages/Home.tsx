@@ -103,7 +103,7 @@ export default function Home(): JSX.Element {
       }),
       getDiscountGoods({
         startIdx: 0,
-        offset: 5,
+        offset: 4,
       }),
       getNewGoods({
         startIdx: 0,
