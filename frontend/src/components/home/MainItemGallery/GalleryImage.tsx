@@ -9,7 +9,7 @@ type Props = {
 };
 
 const ImgDiv = styled.div`
-  width: calc((100% - 30px) / 5);
+  width: calc((100% - 30px) / 4);
   height: 25vw;
   background-size: cover;
   &:hover {

@@ -28,10 +28,11 @@ const HeartArea = styled.div`
   bottom: 10px;
   right: 10px;
   text-align: center;
+  line-height: 33px;
 `;
 
-const Heart = styled.span`
-  line-height: 33px;
+const Heart = styled.img`
+  width: 20px;
   vertical-align: middle;
 `;
 
@@ -75,7 +76,7 @@ export default function ItemImg(): JSX.Element {
           setIsClicked(!isClicked);
         }}
       >
-        <Heart style={{ color: isClicked ? "red" : "white" }}>♥</Heart>
+        <Heart src={`/asset/icon/${isClicked ? "red" : ""}heart.svg`} />
       </HeartArea>
     </ItemImage>
   );
