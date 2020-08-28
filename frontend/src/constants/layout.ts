@@ -12,5 +12,5 @@ export const PULL_TO = {
 };
 
 export const RECOMMEND_SECTION = {
-  SIZE: 500,
+  SIZE: 550,
 };

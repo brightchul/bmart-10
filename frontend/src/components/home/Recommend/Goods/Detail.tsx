@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import ItemPrice from "./ItemPrice";
 
-const MARGIN_TOP = "0.3em";
+const MARGIN_TOP = "5px";
 
 const Wrapper = styled.div`
   margin-top: ${MARGIN_TOP};
@@ -12,9 +12,9 @@ const Wrapper = styled.div`
 const ItemTitle = styled.div`
   white-space: break-spaces;
   height: 40px;
-  line-height: 1rem;
+  line-height: 16px;
 
-  font-size: 1rem;
+  font-size: 16px;
   overflow: hidden;
 `;
 
