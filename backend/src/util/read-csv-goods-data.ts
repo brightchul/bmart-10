@@ -11,21 +11,24 @@ type Row = {
   cost: string;
   image_url: string;
 };
-
-fs.createReadStream("./data/output.csv")
+export default function Run() {
+  
+  fs.createReadStream("./src/util/data/output.csv")
   .pipe(csv())
   .on("data", (row: Row) => {
     const data: Goods = {
       name: row.name,
       categoryName: row.category_name,
-      cost: Number(row.cost.replace(",", "")),
+      cost: parseInt(row.cost.replace(",", "")),
       discount: Math.round(Math.random() * 10) * 5,
       amount: 1000,
       imageUrl: row.image_url,
     };
-
+    
     goodsDAO.createGoods(data);
   })
   .on("end", () => {
     console.log("CSV file successfully processed");
   });
+}
+  
