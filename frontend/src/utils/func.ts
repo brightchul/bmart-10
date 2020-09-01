@@ -1,4 +1,4 @@
-const PRE_IMG_URL = `https://bmart-10-bucket.s3.ap-northeast-2.amazonaws.com/public/img/`;
+const PRE_IMG_URL = `/asset/img/`;
 
 export const imgURL = (name?: string): string => {
   if (!name) return "";

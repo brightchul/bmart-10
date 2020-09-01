@@ -1,13 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import PLACE_HOLDER from "./placeholder.jpg";
+import {imgURL} from "./../../../utils/func";
 
 type Props = {
   imageURL: string;
 };
-
-const BUCKET_URL =
-  "https://bmart-10-bucket.s3.ap-northeast-2.amazonaws.com/public/img/";
 
 let observer: IntersectionObserver | null = null;
 
@@ -60,7 +58,7 @@ export default function LazyImage(props: Props): JSX.Element {
   return (
     <Image
       ref={imgRef}
-      imageURL={isLoad ? `${BUCKET_URL}${props.imageURL}` : PLACE_HOLDER}
+      imageURL={isLoad ? `${imgURL(props.imageURL)}` : PLACE_HOLDER}
     />
   );
 }
