@@ -19,3 +19,9 @@ yarn-error.log*
 
 # env
 .env
+
+#etc
+img
+img.zip
+*.sql
+*.csv
