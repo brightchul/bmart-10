@@ -132,7 +132,7 @@ class GoodsDAO extends DAO {
     for (const mainCategoryInfo of mainCategoryInfos) {
       const currentRow = mainCategoryInfo as {
         name: string;
-        subCategories: string[];
+        subCategories: string;
       };
 
       const currentRecommend: Recommend = {
@@ -140,12 +140,13 @@ class GoodsDAO extends DAO {
         goodsData: [],
       };
 
-      const currentSelectQuery = `${SEARCH_MAIN_CATEGORY_GOODS} ('${currentRow.subCategories.join(
-        "', '"
-      )}') ${ORDER_BY_RANDOM}`;
+      const currentSelectQuery = `${SEARCH_MAIN_CATEGORY_GOODS} ('${currentRow.subCategories
+        .split(",")
+        .join("', '")}') ${ORDER_BY_RANDOM}`;
 
+      console.log(currentSelectQuery);
       const datas = await this.executeQuery(connection, currentSelectQuery, []);
-
+      console.log((datas as Row[]).length);
       currentRecommend.goodsData = (datas as Row[]).map((data) => {
         return {
           id: data.good_id,
