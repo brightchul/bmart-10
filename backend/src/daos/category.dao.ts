@@ -73,11 +73,12 @@ class CategoryDAO extends DAO {
   async getSubCategoryNameList(
     mainName: string
   ): Promise<SubCategoryNameList | undefined> {
-    const result = await this.getOneInfo<SubCategoryNameList>(
+    const result = await this.getOneInfo<{ name: string; data: string }>(
       SEARCH_SUB_CATEGORY_NAME_LIST,
       [mainName]
     );
-    return result;
+    if (!result) return result;
+    return { name: result.name, data: result.data.split(",") };
   }
   async getSubCategoryInfo(name: string): Promise<SubCategoryInfo> {
     const result: SubCategoryInfo = await this.getOneInfo<SubCategoryInfo>(
